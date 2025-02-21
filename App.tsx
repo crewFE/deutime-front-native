@@ -2,12 +2,26 @@ import * as React from "react";
 import "@/global.css";
 import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
 import { NavigationContainer } from "@react-navigation/native";
-import { MyTabs } from "./src/components/bottomTabs";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import HomeScreen from "./src/screens/Home/HomeScreen";
+import NewEvent from "./src/screens/NewEvent/NewEvent";
+import Search from "./src/screens/Search/Search";
+import Profile from "./src/screens/Profile/Profile";
+import { Header } from "@react-navigation/stack";
+
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <GluestackUIProvider mode="light"><NavigationContainer>
-        <MyTabs />
-      </NavigationContainer></GluestackUIProvider>
+    <GluestackUIProvider mode="light">
+      <NavigationContainer>
+        <Tab.Navigator screenOptions={{ headerShown: false }}>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="NewEvent" component={NewEvent} />
+          <Tab.Screen name="Search" component={Search} />
+          <Tab.Screen name="Profile" component={Profile} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </GluestackUIProvider>
   );
 }

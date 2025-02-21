@@ -1,12 +1,32 @@
 import React from "react";
-import { styles } from "./styles";
-import { Text, View } from "react-native";
+import { Heading } from "@/components/ui/heading";
+import { VStack } from "@/components/ui/vstack";
+import { ImageCard } from "@/src/components/ImageCard";
+import { HStack } from "@/components/ui/hstack";
+import { Box } from "@/components/ui/box";
 
 function HomeScreen() {
   return (
-    <View style={styles.container}>
-      <Text>HomePage</Text>
-    </View>
+    <VStack>
+      <Heading>Modalidades</Heading>
+
+      <Heading>Espaços</Heading>
+      <Box className="max-w-full overflow-x-scroll">
+        <HStack space="md">
+          <ImageCard />
+          <ImageCard />
+          <ImageCard />
+        </HStack>
+      </Box>
+      <Heading>Regiões</Heading>
+      <Box className="max-w-full overflow-x-scroll">
+        <HStack space="sm">
+          <ImageCard />
+          <ImageCard />
+          <ImageCard />
+        </HStack>
+      </Box>
+    </VStack>
   );
 }
 
