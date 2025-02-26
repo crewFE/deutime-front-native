@@ -17,7 +17,7 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator screenOptions={{ headerShown: false }}>
           <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="NewEvent" component={NewEvent} />
+          {/*<Tab.Screen name="NewEvent" component={NewEvent} />*/}
           <Tab.Screen name="Search" component={Search} />
           <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>

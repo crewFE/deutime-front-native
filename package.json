@@ -49,6 +49,7 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "expo": "~52.0.23",
     "expo-status-bar": "~2.0.0",
+    "lucide-react": "^0.476.0",
     "react": "^18.3.1",
     "react-dom": "18.3.1",
     "react-native": "^0.76.5",
@@ -66,6 +67,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.9",
+    "@babel/plugin-transform-private-methods": "^7.25.9",
     "@babel/plugin-transform-react-jsx-self": "^7.25.9",
     "@babel/plugin-transform-react-jsx-source": "^7.25.9",
     "@react-native-community/cli": "latest",

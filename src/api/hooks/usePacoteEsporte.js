@@ -49,6 +49,5 @@ export const usePacoteEsporte = () => {
     fetchModalidades,
     fetchModalidadeById,
     createModalidade,
-    // Adicione outros métodos aqui.
   };
 };

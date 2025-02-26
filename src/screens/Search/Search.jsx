@@ -18,7 +18,7 @@ function Search() {
         />
 
         <TouchableOpacity style={styles.button} onPress={handleSearch}>
-          <Text style={styles.buttonText}>+</Text>
+          <Text style={styles.buttonText}></Text>
         </TouchableOpacity>
       </View>
     </View>
