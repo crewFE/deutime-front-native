@@ -7,6 +7,8 @@ import NewEvent from "./src/screens/NewEvent/NewEvent";
 import Search from "./src/screens/Search/Search";
 import Profile from "./src/screens/Profile/Profile";
 import HomeStack from "./src/navigation/HomeStack";
+import TesteEndereco from "./src/components/TesteEvento";
+import TesteEvento from "./src/components/TesteEvento";
 
 const Tab = createBottomTabNavigator();
 
@@ -16,9 +18,10 @@ export default function App() {
       <NavigationContainer>
         <Tab.Navigator screenOptions={{ headerShown: false }}>
           <Tab.Screen name="Home" component={HomeStack} />
-          {/*<Tab.Screen name="NewEvent" component={NewEvent} />*/}
+          {<Tab.Screen name="TesteEvento" component={TesteEvento} />}
+          {/* <Tab.Screen name="NewEvent" component={NewEvent} /> */}
           <Tab.Screen name="Search" component={Search} />
-          <Tab.Screen name="Profile" component={Profile} />
+          <Tab.Screen name="Profile" component={Profile} />          
         </Tab.Navigator>
       </NavigationContainer>
     </GluestackUIProvider>
