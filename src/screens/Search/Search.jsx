@@ -9,7 +9,7 @@ function Search() {
 
   return (
     <View style={styles.container}>
-      <Text className="text-white text-xl">Procure Eventos:</Text>
+      <Text style={styles.text}>Procure Eventos:</Text>
       <View style={styles.form}>
         <TextInput
           style={styles.input}

@@ -1,34 +1,50 @@
 import { Card } from "@/components/ui/card";
+import { useNavigation } from "@react-navigation/native";
 import { Heading } from "@/components/ui/heading";
-import { HStack } from "@/components/ui/hstack";
-import { Image, View } from "react-native";
-import { Link, LinkText } from "@/components/ui/link";
-import { Icon, ArrowRightIcon } from "@/components/ui/icon";
+import { Image, TouchableOpacity, View } from "react-native";
 
-export function ImageCard({fotoURL, descricao}) {
+export function ImageCard({ fotoURL, descricao }) {
+  const navigation = useNavigation();
+
   return (
-    <Card className="flex h-full rounded-lg w-full m-2 shadow-md">
-      <View className="w-full  aspect-square mb-3 rounded">
-      <Image source={{uri: `${fotoURL}`}}
-       style={{width: 200, height: 200, borderRadius: 2}} resizeMode="cover" />
-       </View>
-
-      <Heading size="lg" className="mb-2 line-clamp-2">
-        {descricao}
-      </Heading>
-        <HStack className="items-center justify-end">
-          <LinkText
-            size="sm"
-            className="font-semibold text-info-600 no-underline"
-          >
-            Ver Eventos
-          </LinkText>
-          <Icon
-            as={ArrowRightIcon}
-            size="sm"
-            className="text-info-600 mt-0.5 ml-0.5"
+    <TouchableOpacity
+      onPress={() => navigation.navigate("Details", { descricao, fotoURL })}
+    >
+      <Card
+        style={{
+          maxWidth: "60vw",
+        }}
+      >
+        <View
+          style={{
+            display: "flex",
+            alignItems: "center",
+            padding: 1,
+          }}
+        >
+          <Image
+            source={{ uri: `${fotoURL}` }}
+            style={{
+              width: 200,
+              height: 200,
+              borderRadius: 2,
+              elevation: 8,
+            }}
+            resizeMode="cover"
           />
-        </HStack>
-    </Card>
+        </View>
+
+        <Heading
+          style={{
+            textShadowColor: "rgba(0, 0, 0, 0.75)",
+            textShadowOffset: { width: 2, height: 2 },
+            textShadowRadius: 5,
+          }}
+          size="lg"
+        >
+          {descricao}
+        </Heading>
+      </Card>
+    </TouchableOpacity>
   );
 }

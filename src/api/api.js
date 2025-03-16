@@ -1,18 +1,17 @@
-import axios from 'axios';
-import { API_BASE_URL } from '@env';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: API_BASE_URL,
+  baseURL: "https://deutime-backend-spring.onrender.com",
   timeout: 10000,
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 api.interceptors.response.use(
-  response => response,
-  error => {
-    console.error('Erro na API:', error.response || error.message);
+  (response) => response,
+  (error) => {
+    console.error("Erro na API:", error.response || error.message);
     return Promise.reject(error);
   }
 );

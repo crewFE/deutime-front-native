@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import ApiService from '../api'; 
+import { useState } from "react";
+import ApiService from "../api";
 
 export const usePacoteEsporte = () => {
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchModalidades = async () => {
+  const fetchEsportes = async () => {
     setLoading(true);
     try {
-      const response = await ApiService.get('/modalidades');
+      const response = await ApiService.get("/esportes");
       setData(response.data.content);
     } catch (err) {
       setError(err);
@@ -18,10 +18,10 @@ export const usePacoteEsporte = () => {
     }
   };
 
-  const fetchModalidadeById = async (id) => {
+  const fetchEsporteById = async (id) => {
     setLoading(true);
     try {
-      const response = await ApiService.get(`/modalidades/${id}`);
+      const response = await ApiService.get(`/esportes/${id}`);
       setData(response.data);
     } catch (err) {
       setError(err);
@@ -30,10 +30,10 @@ export const usePacoteEsporte = () => {
     }
   };
 
-  const createModalidade = async (modalidade) => {
+  const createModalidade = async (esporte) => {
     setLoading(true);
     try {
-      const response = await ApiService.post('/modalidades', modalidade);
+      const response = await ApiService.post("/esportes", esporte);
       setData(response.data);
     } catch (err) {
       setError(err);
@@ -46,8 +46,8 @@ export const usePacoteEsporte = () => {
     data,
     error,
     loading,
-    fetchModalidades,
-    fetchModalidadeById,
+    fetchEsportes,
+    fetchEsporteById,
     createModalidade,
   };
 };
