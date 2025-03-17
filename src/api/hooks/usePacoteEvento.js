@@ -95,8 +95,6 @@ export const usePacoteEvento = () => {
     }
   };
 
-    // Incluir Avaliação e EventoParticipantes?
-
   return {
     eventos,
     error,
@@ -105,6 +103,6 @@ export const usePacoteEvento = () => {
     fetchEventoById,
     createEvento,
     updateEvento,
-    deleteEvento,
+    deleteEvento
   };
 };
