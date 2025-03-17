@@ -1,17 +1,66 @@
+import { Box } from "@/components/ui/box";
+import EventList from "@/src/components/EventList";
 import { View, Text, Image } from "react-native";
 
 export default function DetailsScreen({ route }) {
-  const { descricao, fotoURL } = route.params;
+  const { descricao, fotoURL, type } = route.params;
 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#001A6E",
+      }}
+    >
       <Image
         source={{ uri: fotoURL }}
-        style={{ width: 300, height: 300, borderRadius: 10 }}
+        style={{ width: "100%", height: "30%" }}
       />
-      <Text style={{ fontSize: 24, fontWeight: "bold", marginTop: 20 }}>
-        {descricao}
-      </Text>
+      <Box
+        style={{
+          height: "100%",
+          width: "100%",
+          borderRadius: 8,
+          borderColor: "black",
+        }}
+      >
+        <Text
+          style={{
+            color: "#fafafa",
+            fontSize: 24,
+            fontWeight: "bold",
+            margin: 2,
+            textShadowColor: "rgba(0, 0, 0, 0.75)",
+            textShadowOffset: { width: 1, height: 1 },
+            textShadowRadius: 1,
+          }}
+        >
+          {descricao}
+        </Text>{" "}
+        <Text
+          style={{
+            color: "#fafafa",
+            fontSize: 18,
+            fontWeight: "500",
+            marginLeft: 30,
+          }}
+        >
+          Eventos
+        </Text>
+        <View
+          style={{
+            flex: 1,
+            backgroundColor: "rgba(0, 0, 0, 0.35)",
+            borderWidth: 1,
+            borderTopRightRadius: 20,
+            borderTopLeftRadius: 20,
+          }}
+        >
+          <EventList />
+        </View>
+      </Box>
     </View>
   );
 }

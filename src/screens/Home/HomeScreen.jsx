@@ -106,6 +106,7 @@ function HomeScreen() {
                     key={regiao.id}
                     descricao={regiao.descricao}
                     fotoURL={regiao.fotoLocal}
+                    type="region"
                   />
                 ))}
               </HStack>
@@ -126,6 +127,7 @@ function HomeScreen() {
                     key={local.id}
                     descricao={local.descricao}
                     fotoURL={local.fotoLocal}
+                    type="court"
                   />
                 ))}
               </HStack>
