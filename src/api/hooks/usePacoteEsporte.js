@@ -2,7 +2,7 @@ import { useState } from "react";
 import ApiService from "../api";
 
 export const usePacoteEsporte = () => {
-  const [data, setData] = useState([]);
+  const [esportes, setEsportes] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -43,7 +43,7 @@ export const usePacoteEsporte = () => {
   };
 
   return {
-    data,
+    esportes,
     error,
     loading,
     fetchEsportes,

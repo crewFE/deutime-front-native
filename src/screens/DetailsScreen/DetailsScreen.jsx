@@ -3,7 +3,7 @@ import EventList from "@/src/components/EventList";
 import { View, Text, Image } from "react-native";
 
 export default function DetailsScreen({ route }) {
-  const { descricao, fotoURL, type } = route.params;
+  const { id, descricao, fotoURL, type } = route.params;
 
   return (
     <View
@@ -58,7 +58,7 @@ export default function DetailsScreen({ route }) {
             borderTopLeftRadius: 20,
           }}
         >
-          <EventList />
+          <EventList id={id} type={type} />
         </View>
       </Box>
     </View>

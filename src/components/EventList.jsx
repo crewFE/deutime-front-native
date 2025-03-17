@@ -10,7 +10,7 @@ import {
   Button,
 } from "react-native";
 
-const EventList = () => {
+const EventList = ({ id, type }) => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -21,11 +21,13 @@ const EventList = () => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(
-        "https://deutime-backend-spring.onrender.com/eventos"
-      );
+      const url =
+        type === "court"
+          ? `https://deutime-backend-spring.onrender.com/eventos/local/${id}`
+          : `https://deutime-backend-spring.onrender.com/eventos/modalidade/${id}`;
+      const response = await fetch(url);
       const data = await response.json();
-      setEvents(data.content);
+      setEvents(data);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }

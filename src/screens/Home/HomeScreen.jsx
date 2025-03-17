@@ -43,7 +43,7 @@ function HomeScreen() {
 
   useEffect(() => {
     //fetchEsportes();
-    //fetchLocais();
+    fetchLocais();
   }, []);
 
   if (loading) {
@@ -104,6 +104,7 @@ function HomeScreen() {
                 {regioes.map((regiao) => (
                   <ImageCard
                     key={regiao.id}
+                    id={regiao.id}
                     descricao={regiao.descricao}
                     fotoURL={regiao.fotoLocal}
                     type="region"
@@ -125,6 +126,7 @@ function HomeScreen() {
                 {locaisArray.map((local) => (
                   <ImageCard
                     key={local.id}
+                    id={local.id}
                     descricao={local.descricao}
                     fotoURL={local.fotoLocal}
                     type="court"

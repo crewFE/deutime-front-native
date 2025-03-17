@@ -3,13 +3,13 @@ import { useNavigation } from "@react-navigation/native";
 import { Heading } from "@/components/ui/heading";
 import { Image, TouchableOpacity, View } from "react-native";
 
-export function ImageCard({ fotoURL, descricao, type }) {
+export function ImageCard({ id, fotoURL, descricao, type }) {
   const navigation = useNavigation();
 
   return (
     <TouchableOpacity
       onPress={() =>
-        navigation.navigate("Details", { descricao, fotoURL, type })
+        navigation.navigate("Details", { id, descricao, fotoURL, type })
       }
     >
       <Card
