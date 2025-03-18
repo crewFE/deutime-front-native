@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://deutime-backend-spring.onrender.com",
-  timeout: 20000,
+  timeout: 30000,
   headers: {
     "Content-Type": "application/json",
   },

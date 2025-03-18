@@ -4,174 +4,164 @@ import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ImageCard } from "@/src/components/ImageCard";
-import { EventList } from "@/src/components/EventList";
 import { ScrollView } from "react-native";
-import { usePacoteUsuario } from "@/src/api/hooks/usePacoteUsuario";
-import { usePacoteEndereco } from "@/src/api/hooks/usePacoteEndereco";
-import { useTelefoneUsuario } from "@/src/api/hooks/useTelefoneUsuario";
-import { usePacoteEmailUsuario } from "@/src/api/hooks/usePacoteEmailUsuario";
 import { usePacoteEvento } from "@/src/api/hooks/usePacoteEvento";
 import { useEventoParticipantes } from "@/src/api/hooks/useEventoParticipantes";
+import { usePacoteEndereco } from "@/src/api/hooks/usePacoteEndereco";
+import { usePacoteEmailUsuario } from "@/src/api/hooks/usePacoteEmailUsuario";
+import { useTelefoneUsuario } from "@/src/api/hooks/useTelefoneUsuario";
+
+// Dados do usuário fixos para teste
+const usuario = {
+  id: 3,
+  nome: "Cícero",
+  sobrenome: "Neves",
+  genero: "MASCULINO",
+  fotoPerfil: "https://img.freepik.com/free-photo/front-view-sportsman-with-copy-space_23-2148222189.jpg?t=st=1742323988~exp=1742327588~hmac=d6de04317b27303e4065af5c675084d4719dde6701c47b8d40d3278fc4b1056f&w=1380",
+  nroEndereco : "106",
+  complemento : "CASA DOS FUNDOS"
+};
 
 function Profile() {
-  const [userIdInput, setUserIdInput] = useState("");
-
-  const { usuario, loading: userLoading, error: userError, fetchUsuarioById } = usePacoteUsuario();
-  const { enderecos, loading: enderecoLoading, error: enderecoError, fetchEnderecoById } = usePacoteEndereco();
-  const { telefones, loading: telefoneLoading, error: telefoneError, fetchTelefoneById } = useTelefoneUsuario();
-  const { emails, loading: emailLoading, error: emailError, fetchEmailById } = usePacoteEmailUsuario();
-  const { eventos, loading: eventoLoading, error: eventoError, fetchEventos } = usePacoteEvento();
-  const { participantes, loading: participanteLoading, error: participanteError, fetchParticipantes } = useEventoParticipantes();
-
-  const isLoading = userLoading || enderecoLoading || telefoneLoading || emailLoading || eventoLoading || participanteLoading;
-  const error = userError || enderecoError || telefoneError || emailError || eventoError || participanteError;
+  const { eventos, fetchEventos } = usePacoteEvento();
+  const { participantes, fetchParticipantes } = useEventoParticipantes();
+  const { enderecos, fetchEnderecoById } = usePacoteEndereco();
+  const { emails, fetchEmailById } = usePacoteEmailUsuario();
+  const { telefones, fetchTelefoneById } = useTelefoneUsuario();
 
   const [eventosCriados, setEventosCriados] = useState([]);
   const [eventosParticipantes, setEventosParticipantes] = useState([]);
 
-  // Busca inicial de dados
+  // Busca todos os eventos, participantes, endereço, email e telefone ao carregar a tela
   useEffect(() => {
     fetchEventos();
     fetchParticipantes();
+    fetchEnderecoById(usuario.id); // Buscar endereço com base no ID do usuário
+    fetchEmailById(usuario.id); // Buscar email com base no ID do usuário
+    fetchTelefoneById(usuario.id); // Buscar telefone com base no ID do usuário
   }, []);
 
-  // Atualiza eventos filtrados quando os dados mudam
   useEffect(() => {
-    if (usuario && eventos?.content?.length > 0 && participantes?.content?.length > 0) {
-      const eventosCriadosFiltrados = eventos.content.filter(
+    console.log("Eventos1:", eventos);
+    console.log("Participantes1:", participantes);
+    console.log("Endereços:", enderecos);
+    console.log("Emails:", emails);
+    console.log("Telefones:", telefones);
+  }, [eventos, participantes, enderecos, emails, telefones]);
+
+  // Filtra eventos criados e eventos em que o usuário participa
+  useEffect(() => {
+    if (eventos && participantes) {
+      // Filtra eventos criados pelo usuário
+      const eventosCriadosFiltrados = eventos.filter(
         evento => evento.responsavel?.id === usuario.id
       );
-      
-      const eventosParticipantesFiltrados = participantes.content
+      setEventosCriados(eventosCriadosFiltrados);
+
+      // Filtra eventos em que o usuário participa
+      const eventosParticipantesFiltrados = participantes
         .filter(participante => participante.usuario?.id === usuario.id)
         .map(participante => participante.evento);
-
-      setEventosCriados(eventosCriadosFiltrados);
       setEventosParticipantes(eventosParticipantesFiltrados);
     }
-  }, [usuario, eventos, participantes]);
+  }, [eventos, participantes]);
 
-  // Busca dados relacionados quando o usuário é carregado
-  useEffect(() => {
-    if (usuario?.id) {
-      if (usuario.endereco?.id) fetchEnderecoById(usuario.endereco.id);
-      if (usuario.telefonesIds) usuario.telefonesIds.forEach(fetchTelefoneById);
-      if (usuario.emailsIds) usuario.emailsIds.forEach(fetchEmailById);
-    }
-  }, [usuario]);
-
-  // Handler para busca de usuário
-  const handleSearchUser = () => {
-    if (userIdInput.trim()) {
-      fetchUsuarioById(userIdInput.trim());
-    }
-  };
-
-    // Tratamento de estados de carregamento e erro
-    if (isLoading) {
-      return (
-        <VStack className="flex-1 justify-center items-center">
-          <Text>Carregando dados...</Text>
-        </VStack>
-      );
-    }
-
-    if (error) {
-      return (
-        <VStack className="flex-1 justify-center items-center">
-          <Text className="text-red-500">Erro: {error.message}</Text>
-        </VStack>
-      );
-    }
-
-  
   return (
     <Box className="h-full bg-gray-50">
       <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
         <VStack className="gap-4 p-4">
-          {/* Seção de busca */}
+          {/* Seção de perfil do usuário */}
           <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Buscar Usuário</Heading>
-            <HStack space="sm" className="items-center">
-              <Input
-                placeholder="Digite o ID do usuário"
-                value={userIdInput}
-                onChangeText={setUserIdInput}
-                className="flex-1 border rounded p-2"
-                keyboardType="numeric"
-              />
-              { <Button 
-                onPress={handleSearchUser}
-                className="bg-blue-500 px-4 py-2 rounded"
-              >
-                <Text className="text-white">Buscar</Text>
-              </Button> }
-            </HStack>
+            <Heading className="mb-2 text-lg font-bold">Perfil do Usuário</Heading>
+            <VStack space="sm">
+              {usuario.fotoPerfil && (
+                <ImageCard
+                  fotoURL={usuario.fotoPerfil}
+                  descricao={usuario.nome}
+                  className="w-full h-48 rounded-lg"
+                />
+              )}
+              <Text className="font-semibold">Nome: {usuario.nome} {usuario.sobrenome}</Text>
+              <Text>Gênero: {usuario.genero}</Text>
+            </VStack>
           </Box>
 
-          {/* Seção de perfil */}
-          {usuario && (
-            <Box className="bg-white p-4 rounded-lg shadow-sm">
-              <Heading className="mb-2 text-lg font-bold">Perfil do Usuário</Heading>
+          {/* Seção de endereço do usuário */}
+          <Box className="bg-white p-4 rounded-lg shadow-sm">
+            <Heading className="mb-2 text-lg font-bold">Endereço</Heading>
+            {enderecos.length > 0 ? (
               <VStack space="sm">
-                {usuario.fotoPerfil && (
-                  <ImageCard
-                    fotoURL={usuario.fotoPerfil}
-                    descricao={usuario.nome}
-                    className="w-full h-48 rounded-lg"
-                  />
-                )}
-
-                <Text className="font-semibold">Nome: {usuario.nome} {usuario.sobrenome}</Text>
-                <Text>Gênero: {usuario.genero}</Text>
-
-                {enderecos[0] && (
-                  <Text>
-                    Endereço: {enderecos[0].logradouro.tipoLogradouro.sigla} {enderecos[0].logradouro.nome}, 
-                    {usuario.nroEndereco} - {enderecos[0].bairro.nome}, {enderecos[0].cidade.nome}/{enderecos[0].cidade.unidadeFederativa.sigla}
-                  </Text>
-                )}
-
-                {telefones.length > 0 && (
-                  <VStack>
-                    <Text className="font-semibold">Telefones:</Text>
-                    {telefones.map(telefone => (
-                      <Text key={telefone.id}>
-                        ({telefone.ddd.codigoArea}) {telefone.nroTelefone}
-                      </Text>
-                    ))}
-                  </VStack>
-                )}
-
-                {emails.length > 0 && (
-                  <VStack>
-                    <Text className="font-semibold">Emails:</Text>
-                    {emails.map(email => (
-                      <Text key={email.id}>{email.enderecoEmail}</Text>
-                    ))}
-                  </VStack>
-                )}
+                <Text>CEP: {enderecos[0]?.cep}</Text>
+                <Text>Logradouro: {enderecos[0]?.logradouro?.tipoLogradouro?.nome} {enderecos[0]?.logradouro?.nome}</Text>
+                <Text>Número: {usuario?.nroEndereco}</Text> {/* Acessando nroEndereco do objeto usuario */}
+                <Text>Complemento: {usuario?.complemento}</Text> {/* Acessando complemento do objeto usuario */}
+                <Text>Bairro: {enderecos[0]?.bairro?.nome}</Text>
+                <Text>Cidade: {enderecos[0]?.cidade?.nome}, {enderecos[0]?.cidade?.unidadeFederativa?.sigla}</Text>
               </VStack>
-            </Box>
-          )}
-
-          {/* Seção de eventos */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Próximos Eventos</Heading>
-            <EventList events={eventosParticipantes} />
+            ) : (
+              <Text>Endereço não disponível.</Text>
+            )}
           </Box>
 
+          {/* Seção de emails do usuário */}
+          <Box className="bg-white p-4 rounded-lg shadow-sm">
+            <Heading className="mb-2 text-lg font-bold">Emails</Heading>
+            {emails.length > 0 ? (
+              <Text>{emails[0]?.enderecoEmail}</Text>
+            ) : (
+              <Text>Email não disponível.</Text>
+            )}
+          </Box>
+
+          {/* Seção de telefones do usuário */}
+          <Box className="bg-white p-4 rounded-lg shadow-sm">
+            <Heading className="mb-2 text-lg font-bold">Telefones</Heading>
+            {telefones.length > 0 ? (
+              <Text>({telefones[0]?.ddd?.codigoArea}) {telefones[0]?.nroTelefone}</Text>
+            ) : (
+              <Text>Telefone não disponível.</Text>
+            )}
+          </Box>
+
+          {/* Seção de eventos em que o usuário participa */}
+          <Box className="bg-white p-4 rounded-lg shadow-sm">
+            <Heading className="mb-2 text-lg font-bold">Eventos Participados / a Participar</Heading>
+            {eventosParticipantes.length > 0 ? (
+              eventosParticipantes.map(evento => (
+                <Box key={evento.id} className="p-2 border-b border-gray-200">
+                  <Text className="font-semibold">{evento.descricao}</Text>
+                  <Text>Data: {evento.dataEvento}</Text>
+                  <Text>Local: {evento.local.descricao}</Text>
+                  <Text>Esporte: {evento.esporte.nome}</Text>
+                </Box>
+              ))
+            ) : (
+              <Text>Nenhum evento encontrado.</Text>
+            )}
+          </Box>
+
+          {/* Seção de eventos criados pelo usuário */}
           <Box className="bg-white p-4 rounded-lg shadow-sm">
             <Heading className="mb-2 text-lg font-bold">Eventos Criados</Heading>
-            <EventList events={eventosCriados} />
+            {eventosCriados.length > 0 ? (
+              eventosCriados.map(evento => (
+                <Box key={evento.id} className="p-2 border-b border-gray-200">
+                  <Text className="font-semibold">{evento.descricao}</Text>
+                  <Text>Data: {evento.dataEvento}</Text>
+                  <Text>Local: {evento.local.descricao}</Text>
+                  <Text>Esporte: {evento.esporte.nome}</Text>
+                </Box>
+              ))
+            ) : (
+              <Text>Nenhum evento criado.</Text>
+            )}
           </Box>
         </VStack>
       </ScrollView>
     </Box>
-  );  
+  );
 }
 
 export default Profile;
