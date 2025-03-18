@@ -6,7 +6,7 @@ export const useTelefoneUsuario = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // testado, funcionando
+  // Testado, funcionando
   const fetchTelefones = async () => {
     setLoading(true);
     try {
@@ -19,7 +19,7 @@ export const useTelefoneUsuario = () => {
     }
   };
 
-  // testado, funcionando
+  // Testado, funcionando
   const fetchTelefoneById = async (id) => {
     setLoading(true);
     try {
@@ -32,6 +32,7 @@ export const useTelefoneUsuario = () => {
     }
   };
 
+    // Não testado
   const createTelefone = async (telefone) => {
     setLoading(true);
     try {
@@ -44,6 +45,7 @@ export const useTelefoneUsuario = () => {
     }
   };
 
+  // Não testado
   const updateTelefone = async (id, updatedTelefone) => {
     setLoading(true);
     try {
@@ -58,6 +60,7 @@ export const useTelefoneUsuario = () => {
     }
   };
 
+  // Não testado
   const deleteTelefone = async (id) => {
     setLoading(true);
     try {
