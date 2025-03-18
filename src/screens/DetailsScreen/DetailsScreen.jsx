@@ -52,10 +52,6 @@ export default function DetailsScreen({ route }) {
         <View
           style={{
             flex: 1,
-            backgroundColor: "rgba(0, 0, 0, 0.35)",
-            borderWidth: 1,
-            borderTopRightRadius: 20,
-            borderTopLeftRadius: 20,
           }}
         >
           <EventList id={id} type={type} />

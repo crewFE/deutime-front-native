@@ -15,12 +15,25 @@ export default function App() {
   return (
     <GluestackUIProvider mode="light">
       <NavigationContainer>
-        <Tab.Navigator screenOptions={{ headerShown: false }}>
+        <Tab.Navigator
+          screenOptions={{
+            headerShown: false,
+            tabBarStyle: {
+              borderTopWidth: 0,
+              height: 60,
+              paddingBottom: 10,
+            },
+            tabBarLabelStyle: {
+              fontSize: 12,
+              fontWeight: "bold",
+            },
+          }}
+        >
           <Tab.Screen name="Home" component={HomeStack} />
           {<Tab.Screen name="TesteDDD" component={TesteDDD} />}
           {/* <Tab.Screen name="NewEvent" component={NewEvent} /> */}
           <Tab.Screen name="Search" component={Search} />
-          <Tab.Screen name="Profile" component={Profile} />          
+          <Tab.Screen name="Profile" component={Profile} />
         </Tab.Navigator>
       </NavigationContainer>
     </GluestackUIProvider>
