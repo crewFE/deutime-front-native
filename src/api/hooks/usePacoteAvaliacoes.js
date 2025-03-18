@@ -6,7 +6,7 @@ export const usePacoteAvaliacoes = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // Não testado
+  // Testado, funcionando
   const fetchAvaliacoes = async () => {
     setLoading(true);
     console.log('Iniciando busca de avaliações...');
@@ -23,7 +23,7 @@ export const usePacoteAvaliacoes = () => {
     }
   };
 
-  // Não testado
+  // Testado, funcionando
   const fetchAvaliacaoById = async (id) => {
     setLoading(true);
     console.log(`Buscando avaliação com ID: ${id}...`);
@@ -32,8 +32,13 @@ export const usePacoteAvaliacoes = () => {
       console.log('Avaliação recebida:', response.data);
       setAvaliacoes([response.data]);
     } catch (err) {
-      console.error(`Erro ao buscar avaliação com ID ${id}:`, err);
-      setError(err);
+      if (err.code === 'ECONNABORTED') {
+        console.error(`Timeout ao buscar avaliação com ID ${id}:`, err);
+        setError({ message: 'A requisição demorou muito. Tente novamente.' });
+      } else {
+        console.error(`Erro ao buscar avaliação com ID ${id}:`, err);
+        setError(err);
+      }
     } finally {
       setLoading(false);
       console.log(`Busca de avaliação com ID ${id} finalizada.`);
@@ -45,12 +50,13 @@ export const usePacoteAvaliacoes = () => {
     setLoading(true);
     console.log(`Buscando avaliações para o evento com ID: ${idEvento}...`);
     try {
-      const response = await ApiService.get(`/avaliacao/buscarAvaliacoesPorEventoId/${idEvento}`);
+      const response = await ApiService.get(`/avaliacao/evento/${idEvento}`);
       console.log('Avaliações do evento recebidas:', response.data.content);
-      setAvaliacoes(response.data.content);
+      setAvaliacoes(response.data.content); // Atualiza o estado apenas se a requisição for bem-sucedida
     } catch (err) {
       console.error(`Erro ao buscar avaliações para o evento com ID ${idEvento}:`, err);
       setError(err);
+      setAvaliacoes([]); // Limpa o estado em caso de erro
     } finally {
       setLoading(false);
       console.log(`Busca de avaliações para o evento com ID ${idEvento} finalizada.`);
