@@ -25,7 +25,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderWidth: 2,
     borderRadius: 6,
-    borderColor: "#E1FFBB",
+    borderColor: "#ececec",
     width: "95%",
     height: 56,
     color: "#000",
@@ -52,7 +52,7 @@ export const styles = StyleSheet.create({
   },
   textCard: {
     color: "#fafafa",
-    backgroundColor: "#E1FFBB",
+    backgroundColor: "#ececec",
     borderRadius: 2,
     padding: 4,
   },

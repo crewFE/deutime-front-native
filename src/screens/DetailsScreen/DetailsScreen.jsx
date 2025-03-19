@@ -3,7 +3,7 @@ import EventList from "@/src/components/EventList";
 import { View, Text, Image } from "react-native";
 
 export default function DetailsScreen({ route }) {
-  const { id, descricao, fotoURL, type } = route.params;
+  const { id, descricao, fotoURL, type, sportName } = route.params;
 
   return (
     <View
@@ -54,7 +54,7 @@ export default function DetailsScreen({ route }) {
             flex: 1,
           }}
         >
-          <EventList id={id} type={type} />
+          <EventList id={id} type={type} sportName={sportName} />
         </View>
       </Box>
     </View>

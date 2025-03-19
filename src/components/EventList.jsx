@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import ApiService from "../api/api";
 
-const EventList = ({ id, type, searchQuery }) => {
+const EventList = ({ id, type, searchQuery, sportName }) => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,13 +38,13 @@ const EventList = ({ id, type, searchQuery }) => {
 
       switch (type) {
         case "court":
-          endpoint = `/eventos/local/${id}`;
-          break;
-        case "modality":
-          endpoint = `/eventos/modalidade/${id}`;
+          endpoint = `/eventos/local/id/${id}`;
           break;
         case "geral":
           endpoint = `/eventos`;
+          break;
+        case "sport":
+          endpoint = `/eventos/esporte/${sportName}`;
           break;
         default:
           console.error("Tipo inválido:", type);
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f5f5f5",
     borderWidth: 2,
     borderRadius: 6,
-    borderColor: "#E1FFBB",
+    borderColor: "#ececec",
   },
   card: {
     flexDirection: "row",

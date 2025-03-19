@@ -8,9 +8,10 @@ import { usePacoteEsporte } from "@/src/api/hooks/usePacoteEsporte";
 import { usePacoteLocal } from "@/src/api/hooks/useLocais";
 import { useEffect } from "react";
 import { ImageCard } from "@/src/components/ImageCard";
-import { ScrollView } from "react-native";
+import { ScrollView, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
 import { Image } from "react-native";
+import TextCard from "@/src/components/TextCard";
 
 function HomeScreen() {
   const { esportes, loading, fetchEsportes } = usePacoteEsporte();
@@ -25,20 +26,13 @@ function HomeScreen() {
     {
       id: 2,
       descricao: "Jardim Universitário",
-      fotoLocal:
-        "https://th.bing.com/th/id/R.0326b6deb985e62f5d2c82529202c247?rik=GT%2bxZ8RWFVz43g&riu=http%3a%2f%2fagenciasn.com.br%2fwp-content%2fuploads%2f2017%2f07%2fUNILA-Unidade-Jardim-Universit%c3%a1rio-2-1024x661.jpg&ehk=KBjceVMqzvaERGySWScGAySMqb%2bKXren9DPzjIhkvJs%3d&risl=&pid=ImgRaw&r=0",
+      fotoLocal: "https://gdia.com.br/wp-content/uploads/2023/10/unila-1.jpg",
     },
     {
       id: 3,
-      descricao: "Jardim kkkk",
+      descricao: "Vila A",
       fotoLocal:
-        "https://th.bing.com/th/id/R.0326b6deb985e62f5d2c82529202c247?rik=GT%2bxZ8RWFVz43g&riu=http%3a%2f%2fagenciasn.com.br%2fwp-content%2fuploads%2f2017%2f07%2fUNILA-Unidade-Jardim-Universit%c3%a1rio-2-1024x661.jpg&ehk=KBjceVMqzvaERGySWScGAySMqb%2bKXren9DPzjIhkvJs%3d&risl=&pid=ImgRaw&r=0",
-    },
-    {
-      id: 4,
-      descricao: "Jardim asd",
-      fotoLocal:
-        "https://th.bing.com/th/id/R.0326b6deb985e62f5d2c82529202c247?rik=GT%2bxZ8RWFVz43g&riu=http%3a%2f%2fagenciasn.com.br%2fwp-content%2fuploads%2f2017%2f07%2fUNILA-Unidade-Jardim-Universit%c3%a1rio-2-1024x661.jpg&ehk=KBjceVMqzvaERGySWScGAySMqb%2bKXren9DPzjIhkvJs%3d&risl=&pid=ImgRaw&r=0",
+        "https://i1.wp.com/100fronteiras.com/wp-content/uploads/2020/08/obras-ctg-charrua-foz-foto-itaipu-e1597425477601.jpg?fit=800%2C534&ssl=1",
     },
   ];
 
@@ -76,13 +70,24 @@ function HomeScreen() {
               showsHorizontalScrollIndicator={false}
               style={styles.horizontalScroll}
             >
-              <HStack space="md">
-                {modalidades.map((modalidade) => (
-                  <Text style={styles.textCard} key={modalidade.id}>
-                    {modalidade.nome}
-                  </Text>
-                ))}
-              </HStack>
+              {modalidades?.length > 0 ? (
+                <HStack space="md">
+                  {modalidades.map((modalidade) => (
+                    <TextCard
+                      key={modalidade.id}
+                      id={modalidade.id}
+                      descricao={modalidade.nome}
+                      fotoURL={modalidade.imagem}
+                      type={"sport"}
+                      sportName={modalidade.nome}
+                    />
+                  ))}
+                </HStack>
+              ) : (
+                <Text style={styles.emptyText}>
+                  Nenhuma modalidade encontrada
+                </Text>
+              )}
             </ScrollView>
           </Box>
 
