@@ -1,11 +1,19 @@
 import { StyleSheet } from "react-native";
 
+/*
+const palette = {
+  '#001A6E',
+  '#074799'
+  '#009990'
+  '#E1FFBB'
+  }
+*/
+
 export const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: "center",
-    alignContent: "flex-start",
-    justifyContent: "center",
+    backgroundColor: "#001A6E",
+    height: "100%",
+    overflow: "hidden",
   },
   text: {
     color: "#FFF",
@@ -13,29 +21,39 @@ export const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
+    padding: 10,
+    backgroundColor: "#f5f5f5",
+    borderWidth: 2,
+    borderRadius: 6,
+    borderColor: "#E1FFBB",
+    width: "95%",
     height: 56,
-    backgroundColor: "#1F1E25",
-    borderRadius: 5,
-    color: "#FFF",
-    padding: 16,
-    margin: 7,
+    color: "#000",
     fontSize: 16,
-  },
-  button: {
-    width: 56,
-    height: 56,
-    borderRadius: 5,
-    backgroundColor: "#31CF67",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  buttonText: {
-    color: "#FFF",
-    fontSize: 24,
   },
   form: {
     alignItems: "center",
     width: "100%",
     flexDirection: "row",
+  },
+  titleHeader: {
+    color: "#fafafa",
+    fontSize: 36,
+    padding: 2,
+    margin: 4,
+    marginBottom: 14,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 5,
+  },
+  horizontalScroll: {
+    margin: 2,
+    padding: 4,
+  },
+  textCard: {
+    color: "#fafafa",
+    backgroundColor: "#E1FFBB",
+    borderRadius: 2,
+    padding: 4,
   },
 });

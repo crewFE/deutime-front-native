@@ -9,25 +9,50 @@ import {
   Modal,
   Button,
 } from "react-native";
+import ApiService from "../api/api";
 
-const EventList = ({ id, type }) => {
+const EventList = ({ id, type, searchQuery }) => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [filteredEvents, setFilteredEvents] = useState([]);
 
   useEffect(() => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (searchQuery) {
+      const filtered = events.filter((event) =>
+        event.descricao.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredEvents(filtered);
+    } else {
+      setFilteredEvents(events);
+    }
+  }, [searchQuery, events]);
+
   const fetchData = async () => {
     try {
-      const url =
-        type === "court"
-          ? `https://deutime-backend-spring.onrender.com/eventos/local/${id}`
-          : `https://deutime-backend-spring.onrender.com/eventos/modalidade/${id}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      setEvents(data);
+      let endpoint = "";
+
+      switch (type) {
+        case "court":
+          endpoint = `/eventos/local/${id}`;
+          break;
+        case "modality":
+          endpoint = `/eventos/modalidade/${id}`;
+          break;
+        case "geral":
+          endpoint = `/eventos`;
+          break;
+        default:
+          console.error("Tipo inválido:", type);
+          return;
+      }
+
+      const { data } = await ApiService.get(endpoint);
+      setEvents(data.content);
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
@@ -54,7 +79,7 @@ const EventList = ({ id, type }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={events}
+        data={filteredEvents}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
       />
@@ -101,15 +126,19 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 10,
     backgroundColor: "#f5f5f5",
+    borderWidth: 2,
+    borderRadius: 6,
+    borderColor: "#E1FFBB",
   },
   card: {
     flexDirection: "row",
     backgroundColor: "#fff",
-    borderRadius: 10,
+    borderWidth: 2,
+    borderColor: "#001A6E",
+    borderRadius: 8,
     padding: 10,
     marginBottom: 10,
     alignItems: "center",
-    elevation: 3,
   },
   image: {
     width: 60,

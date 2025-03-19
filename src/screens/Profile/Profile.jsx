@@ -5,13 +5,14 @@ import { HStack } from "@/components/ui/hstack";
 import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Button } from "@/components/ui/button";
-import { ImageCard } from "@/src/components/ImageCard";
 import { ScrollView } from "react-native";
 import { usePacoteEvento } from "@/src/api/hooks/usePacoteEvento";
 import { useEventoParticipantes } from "@/src/api/hooks/useEventoParticipantes";
 import { usePacoteEndereco } from "@/src/api/hooks/usePacoteEndereco";
 import { usePacoteEmailUsuario } from "@/src/api/hooks/usePacoteEmailUsuario";
 import { useTelefoneUsuario } from "@/src/api/hooks/useTelefoneUsuario";
+import { styles } from "./styles";
+import { Image, TouchableOpacity, View } from "react-native";
 
 // Dados do usuário fixos para teste
 const usuario = {
@@ -19,9 +20,10 @@ const usuario = {
   nome: "Cícero",
   sobrenome: "Neves",
   genero: "MASCULINO",
-  fotoPerfil: "https://img.freepik.com/free-photo/front-view-sportsman-with-copy-space_23-2148222189.jpg?t=st=1742323988~exp=1742327588~hmac=d6de04317b27303e4065af5c675084d4719dde6701c47b8d40d3278fc4b1056f&w=1380",
-  nroEndereco : "106",
-  complemento : "CASA DOS FUNDOS"
+  fotoPerfil:
+    "https://as2.ftcdn.net/v2/jpg/12/14/49/83/1000_F_1214498390_LmEZY3InP6vrZLmBVcspGOzemU6XfBmw.jpg",
+  nroEndereco: "106",
+  complemento: "CASA DOS FUNDOS",
 };
 
 function Profile() {
@@ -30,7 +32,6 @@ function Profile() {
   const { enderecos, fetchEnderecoById } = usePacoteEndereco();
   const { emails, fetchEmailById } = usePacoteEmailUsuario();
   const { telefones, fetchTelefoneById } = useTelefoneUsuario();
-
   const [eventosCriados, setEventosCriados] = useState([]);
   const [eventosParticipantes, setEventosParticipantes] = useState([]);
 
@@ -56,34 +57,46 @@ function Profile() {
     if (eventos && participantes) {
       // Filtra eventos criados pelo usuário
       const eventosCriadosFiltrados = eventos.filter(
-        evento => evento.responsavel?.id === usuario.id
+        (evento) => evento.responsavel?.id === usuario.id
       );
       setEventosCriados(eventosCriadosFiltrados);
 
       // Filtra eventos em que o usuário participa
       const eventosParticipantesFiltrados = participantes
-        .filter(participante => participante.usuario?.id === usuario.id)
-        .map(participante => participante.evento);
+        .filter((participante) => participante.usuario?.id === usuario.id)
+        .map((participante) => participante.evento);
       setEventosParticipantes(eventosParticipantesFiltrados);
     }
   }, [eventos, participantes]);
 
   return (
-    <Box className="h-full bg-gray-50">
+    <Box style={styles.background}>
       <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
         <VStack className="gap-4 p-4">
           {/* Seção de perfil do usuário */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Perfil do Usuário</Heading>
-            <VStack space="sm">
+          <Box className="flex items-center justify-center bg-white p-4 rounded-lg shadow-sm ">
+            <Heading className="mb-2 text-2xl font-bold">
+              Perfil do Usuário
+            </Heading>
+            <VStack className="flex items-center justify-center" space="sm">
               {usuario.fotoPerfil && (
-                <ImageCard
-                  fotoURL={usuario.fotoPerfil}
-                  descricao={usuario.nome}
-                  className="w-full h-48 rounded-lg"
-                />
+                <>
+                  <Image
+                    source={{ uri: `${usuario.fotoPerfil}` }}
+                    style={{
+                      width: 200,
+                      height: 200,
+                      borderWidth: 5,
+                      borderRadius: 100,
+                      borderColor: "#001A6E",
+                    }}
+                    resizeMode="cover"
+                  />
+                </>
               )}
-              <Text className="font-semibold">Nome: {usuario.nome} {usuario.sobrenome}</Text>
+              <Text className="text-xl font-semibold">
+                {usuario.nome} {usuario.sobrenome}
+              </Text>
               <Text>Gênero: {usuario.genero}</Text>
             </VStack>
           </Box>
@@ -94,11 +107,19 @@ function Profile() {
             {enderecos.length > 0 ? (
               <VStack space="sm">
                 <Text>CEP: {enderecos[0]?.cep}</Text>
-                <Text>Logradouro: {enderecos[0]?.logradouro?.tipoLogradouro?.nome} {enderecos[0]?.logradouro?.nome}</Text>
-                <Text>Número: {usuario?.nroEndereco}</Text> {/* Acessando nroEndereco do objeto usuario */}
-                <Text>Complemento: {usuario?.complemento}</Text> {/* Acessando complemento do objeto usuario */}
+                <Text>
+                  Logradouro: {enderecos[0]?.logradouro?.tipoLogradouro?.nome}{" "}
+                  {enderecos[0]?.logradouro?.nome}
+                </Text>
+                <Text>Número: {usuario?.nroEndereco}</Text>{" "}
+                {/* Acessando nroEndereco do objeto usuario */}
+                <Text>Complemento: {usuario?.complemento}</Text>{" "}
+                {/* Acessando complemento do objeto usuario */}
                 <Text>Bairro: {enderecos[0]?.bairro?.nome}</Text>
-                <Text>Cidade: {enderecos[0]?.cidade?.nome}, {enderecos[0]?.cidade?.unidadeFederativa?.sigla}</Text>
+                <Text>
+                  Cidade: {enderecos[0]?.cidade?.nome},{" "}
+                  {enderecos[0]?.cidade?.unidadeFederativa?.sigla}
+                </Text>
               </VStack>
             ) : (
               <Text>Endereço não disponível.</Text>
@@ -119,7 +140,9 @@ function Profile() {
           <Box className="bg-white p-4 rounded-lg shadow-sm">
             <Heading className="mb-2 text-lg font-bold">Telefones</Heading>
             {telefones.length > 0 ? (
-              <Text>({telefones[0]?.ddd?.codigoArea}) {telefones[0]?.nroTelefone}</Text>
+              <Text>
+                ({telefones[0]?.ddd?.codigoArea}) {telefones[0]?.nroTelefone}
+              </Text>
             ) : (
               <Text>Telefone não disponível.</Text>
             )}
@@ -127,9 +150,11 @@ function Profile() {
 
           {/* Seção de eventos em que o usuário participa */}
           <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Eventos Participados / a Participar</Heading>
+            <Heading className="mb-2 text-lg font-bold">
+              Eventos Participados / a Participar
+            </Heading>
             {eventosParticipantes.length > 0 ? (
-              eventosParticipantes.map(evento => (
+              eventosParticipantes.map((evento) => (
                 <Box key={evento.id} className="p-2 border-b border-gray-200">
                   <Text className="font-semibold">{evento.descricao}</Text>
                   <Text>Data: {evento.dataEvento}</Text>
@@ -144,9 +169,11 @@ function Profile() {
 
           {/* Seção de eventos criados pelo usuário */}
           <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Eventos Criados</Heading>
+            <Heading className="mb-2 text-lg font-bold">
+              Eventos Criados
+            </Heading>
             {eventosCriados.length > 0 ? (
-              eventosCriados.map(evento => (
+              eventosCriados.map((evento) => (
                 <Box key={evento.id} className="p-2 border-b border-gray-200">
                   <Text className="font-semibold">{evento.descricao}</Text>
                   <Text>Data: {evento.dataEvento}</Text>

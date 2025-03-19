@@ -10,7 +10,7 @@ export const usePacoteEsporte = () => {
     setLoading(true);
     try {
       const response = await ApiService.get("/esportes");
-      setData(response.data.content);
+      setEsportes(response.data.content);
     } catch (err) {
       setError(err);
     } finally {
@@ -22,7 +22,7 @@ export const usePacoteEsporte = () => {
     setLoading(true);
     try {
       const response = await ApiService.get(`/esportes/${id}`);
-      setData(response.data);
+      setEsportes(response.content);
     } catch (err) {
       setError(err);
     } finally {
@@ -34,7 +34,7 @@ export const usePacoteEsporte = () => {
     setLoading(true);
     try {
       const response = await ApiService.post("/esportes", esporte);
-      setData(response.data);
+      setEsportes(response.data);
     } catch (err) {
       setError(err);
     } finally {

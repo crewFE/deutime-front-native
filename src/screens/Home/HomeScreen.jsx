@@ -10,9 +10,10 @@ import { useEffect } from "react";
 import { ImageCard } from "@/src/components/ImageCard";
 import { ScrollView } from "react-native";
 import { styles } from "./styles";
+import { Image } from "react-native";
 
 function HomeScreen() {
-  const { data, loading, error, fetchEsportes } = usePacoteEsporte();
+  const { esportes, loading, fetchEsportes } = usePacoteEsporte();
   const { locais, fetchLocais } = usePacoteLocal();
   const regioes = [
     {
@@ -42,7 +43,7 @@ function HomeScreen() {
   ];
 
   useEffect(() => {
-    //fetchEsportes();
+    fetchEsportes();
     fetchLocais();
   }, []);
 
@@ -54,28 +55,21 @@ function HomeScreen() {
     );
   }
 
-  if (error) {
-    return (
-      <VStack>
-        <Text>Erro ao carregar...</Text>
-      </VStack>
-    );
-  }
-
-  const modalidades = Array.isArray(data) ? data : [];
+  const modalidades = Array.isArray(esportes) ? esportes : [];
   const locaisArray = Array.isArray(locais) ? locais : [];
 
   return (
-    <Box
-      style={{
-        backgroundColor: "#001A6E",
-        height: "100%",
-        overflow: "hidden",
-      }}
-    >
+    <Box style={styles.background}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <VStack>
+        <VStack space="md">
           <Box>
+            <HStack className="flex items-center justify-center">
+              <Image
+                source={require("../../../assets/logo.png")}
+                style={{ width: 300, height: 200 }}
+                resizeMode="contain"
+              />
+            </HStack>
             <Heading style={styles.titleHeader}>Modalidades</Heading>
             <ScrollView
               horizontal
@@ -98,7 +92,6 @@ function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               style={styles.horizontalScroll}
-              contentContainerStyle={{ paddingBottom: 10 }}
             >
               <HStack space="md">
                 {regioes.map((regiao) => (

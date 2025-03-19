@@ -12,41 +12,46 @@ export function ImageCard({ id, fotoURL, descricao, type }) {
         navigation.navigate("Details", { id, descricao, fotoURL, type })
       }
     >
-      <Card
+      <View
         style={{
-          maxWidth: "60vw",
+          display: "flex",
+          alignItems: "center",
+          padding: 1,
+          borderWidth: 4,
+          borderRadius: 6,
+          borderColor: "#ececec",
+          backgroundColor: "#fafafa",
         }}
       >
-        <View
+        <Image
+          source={{ uri: `${fotoURL}` }}
           style={{
-            display: "flex",
-            alignItems: "center",
-            padding: 1,
+            width: 200,
+            height: 200,
+            borderWidth: 4,
+            padding: 2,
+            borderRadius: 6,
+            borderColor: "#fafafa",
           }}
-        >
-          <Image
-            source={{ uri: `${fotoURL}` }}
-            style={{
-              width: 200,
-              height: 200,
-              borderRadius: 2,
-              elevation: 8,
-            }}
-            resizeMode="cover"
-          />
-        </View>
+          resizeMode="cover"
+        />
 
         <Heading
           style={{
-            textShadowColor: "rgba(0, 0, 0, 0.75)",
+            textAlign: "center",
+            textShadowColor: "rgb(0, 0, 0)",
             textShadowOffset: { width: 2, height: 2 },
             textShadowRadius: 5,
+            color: "#444444",
+            fontSize: 14,
+            fontWeight: "semibold",
+            overflow: "hidden",
           }}
-          size="lg"
+          size="md"
         >
           {descricao}
         </Heading>
-      </Card>
+      </View>
     </TouchableOpacity>
   );
 }
