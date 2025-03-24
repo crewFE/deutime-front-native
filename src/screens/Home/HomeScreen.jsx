@@ -1,21 +1,14 @@
-import React from "react";
-import { Heading } from "@/components/ui/heading";
-import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Box } from "@/components/ui/box";
-import { Text } from "@/components/ui/text";
+import React, { useEffect } from "react";
+import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import { usePacoteEsporte } from "@/src/api/hooks/usePacoteEsporte";
 import { usePacoteLocal } from "@/src/api/hooks/useLocais";
-import { useEffect } from "react";
 import { ImageCard } from "@/src/components/ImageCard";
-import { ScrollView, TouchableOpacity } from "react-native";
-import { styles } from "./styles";
-import { Image } from "react-native";
 import TextCard from "@/src/components/TextCard";
 
 function HomeScreen() {
   const { esportes, loading, fetchEsportes } = usePacoteEsporte();
   const { locais, fetchLocais } = usePacoteLocal();
+
   const regioes = [
     {
       id: 1,
@@ -43,9 +36,9 @@ function HomeScreen() {
 
   if (loading) {
     return (
-      <VStack>
-        <Text>Carregando...</Text>
-      </VStack>
+      <View style={styles.centered}>
+        <Text style={styles.loadingText}>Carregando...</Text>
+      </View>
     );
   }
 
@@ -53,90 +46,133 @@ function HomeScreen() {
   const locaisArray = Array.isArray(locais) ? locais : [];
 
   return (
-    <Box style={styles.background}>
+    <View style={styles.background}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <VStack space="md">
-          <Box>
-            <HStack className="flex items-center justify-center">
-              <Image
-                source={require("../../../assets/logo.png")}
-                style={{ width: 300, height: 200 }}
-                resizeMode="contain"
-              />
-            </HStack>
-            <Heading style={styles.titleHeader}>Modalidades</Heading>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.horizontalScroll}
-            >
-              {modalidades?.length > 0 ? (
-                <HStack space="md">
-                  {modalidades.map((modalidade) => (
-                    <TextCard
-                      key={modalidade.id}
-                      id={modalidade.id}
-                      descricao={modalidade.nome}
-                      fotoURL={modalidade.imagem}
-                      type={"sport"}
-                      sportName={modalidade.nome}
-                    />
-                  ))}
-                </HStack>
-              ) : (
-                <Text style={styles.emptyText}>
-                  Nenhuma modalidade encontrada
-                </Text>
-              )}
-            </ScrollView>
-          </Box>
-
-          <Box>
-            <Heading style={styles.titleHeader}>Regiões</Heading>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.horizontalScroll}
-            >
-              <HStack space="md">
-                {regioes.map((regiao) => (
-                  <ImageCard
-                    key={regiao.id}
-                    id={regiao.id}
-                    descricao={regiao.descricao}
-                    fotoURL={regiao.fotoLocal}
-                    type="region"
+        <View style={styles.section}>
+          <View style={styles.centered}>
+            <Image
+              source={require("../../../assets/logo.png")}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
+          <Text style={styles.titleHeader}>Modalidades</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalScroll}
+          >
+            {modalidades.length > 0 ? (
+              <View style={styles.row}>
+                {modalidades.map((modalidade) => (
+                  <TextCard
+                    key={modalidade.id}
+                    id={modalidade.id}
+                    descricao={modalidade.nome}
+                    fotoURL={modalidade.imagem}
+                    type={"sport"}
+                    sportName={modalidade.nome}
                   />
                 ))}
-              </HStack>
-            </ScrollView>
-          </Box>
+              </View>
+            ) : (
+              <Text style={styles.emptyText}>
+                Nenhuma modalidade encontrada
+              </Text>
+            )}
+          </ScrollView>
+        </View>
 
-          <Box>
-            <Heading style={styles.titleHeader}>Praças Esportivas</Heading>
-            <ScrollView
-              horizontal
-              showsHorizontalScrollIndicator={false}
-              style={styles.horizontalScroll}
-              contentContainerStyle={{ paddingBottom: 10 }}
-            >
-              <HStack space="md">
-                {locaisArray.map((local) => (
-                  <ImageCard
-                    key={local.id}
-                    id={local.id}
-                    descricao={local.descricao}
-                    fotoURL={local.fotoLocal}
-                    type="court"
-                  />
-                ))}
-              </HStack>
-            </ScrollView>
-          </Box>
-        </VStack>
+        <View style={styles.section}>
+          <Text style={styles.titleHeader}>Regiões</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalScroll}
+          >
+            <View style={styles.row}>
+              {regioes.map((regiao) => (
+                <ImageCard
+                  key={regiao.id}
+                  id={regiao.id}
+                  descricao={regiao.descricao}
+                  fotoURL={regiao.fotoLocal}
+                  type="region"
+                />
+              ))}
+            </View>
+          </ScrollView>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.titleHeader}>Praças Esportivas</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalScroll}
+            contentContainerStyle={{ paddingBottom: 10 }}
+          >
+            <View style={styles.row}>
+              {locaisArray.map((local) => (
+                <ImageCard
+                  key={local.id}
+                  id={local.id}
+                  descricao={local.descricao}
+                  fotoURL={local.fotoLocal}
+                  type="court"
+                />
+              ))}
+            </View>
+          </ScrollView>
+        </View>
       </ScrollView>
-    </Box>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  background: {
+    backgroundColor: "#001A6E",
+    height: "100%",
+    overflow: "hidden",
+    padding: 0,
+  },
+  section: {
+    marginBottom: 20,
+  },
+  titleHeader: {
+    color: "#fafafa",
+    fontSize: 36,
+    marginTop: 15,
+    marginLeft: 10,
+    marginBottom: 14,
+    textShadowColor: "rgba(0, 0, 0, 0.75)",
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 5,
+  },
+  horizontalScroll: {
+    padding: 10,
+  },
+  emptyText: {
+    color: "#fafafa",
+    marginLeft: 10,
+  },
+  row: {
+    flexDirection: "row",
+  },
+  logo: {
+    width: 300,
+    height: 200,
+  },
+  centered: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  loadingText: {
+    color: "#fff",
+    fontSize: 18,
+    marginTop: 20,
+  },
+});
 
 export default HomeScreen;

@@ -1,18 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Heading } from "@/components/ui/heading";
-import { VStack } from "@/components/ui/vstack";
-import { HStack } from "@/components/ui/hstack";
-import { Box } from "@/components/ui/box";
-import { Text } from "@/components/ui/text";
-import { Button } from "@/components/ui/button";
-import { ScrollView } from "react-native";
+import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import { usePacoteEvento } from "@/src/api/hooks/usePacoteEvento";
 import { useEventoParticipantes } from "@/src/api/hooks/useEventoParticipantes";
 import { usePacoteEndereco } from "@/src/api/hooks/usePacoteEndereco";
 import { usePacoteEmailUsuario } from "@/src/api/hooks/usePacoteEmailUsuario";
 import { useTelefoneUsuario } from "@/src/api/hooks/useTelefoneUsuario";
-import { styles } from "./styles";
-import { Image, TouchableOpacity, View } from "react-native";
 
 // Dados do usuário fixos para teste
 const usuario = {
@@ -68,127 +60,160 @@ function Profile() {
       setEventosParticipantes(eventosParticipantesFiltrados);
     }
   }, [eventos, participantes]);
-
   return (
-    <Box style={styles.background}>
-      <ScrollView showsVerticalScrollIndicator={false} className="flex-1">
-        <VStack className="gap-4 p-4">
-          {/* Seção de perfil do usuário */}
-          <Box className="flex items-center justify-center bg-white p-4 rounded-lg shadow-sm ">
-            <Heading className="mb-2 text-2xl font-bold">
-              Perfil do Usuário
-            </Heading>
-            <VStack className="flex items-center justify-center" space="sm">
-              {usuario.fotoPerfil && (
-                <>
-                  <Image
-                    source={{ uri: `${usuario.fotoPerfil}` }}
-                    style={{
-                      width: 200,
-                      height: 200,
-                      borderWidth: 5,
-                      borderRadius: 100,
-                      borderColor: "#001A6E",
-                    }}
-                    resizeMode="cover"
-                  />
-                </>
-              )}
-              <Text className="text-xl font-semibold">
-                {usuario.nome} {usuario.sobrenome}
-              </Text>
-              <Text>Gênero: {usuario.genero}</Text>
-            </VStack>
-          </Box>
-
-          {/* Seção de endereço do usuário */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Endereço</Heading>
-            {enderecos.length > 0 ? (
-              <VStack space="sm">
-                <Text>CEP: {enderecos[0]?.cep}</Text>
-                <Text>
-                  Logradouro: {enderecos[0]?.logradouro?.tipoLogradouro?.nome}{" "}
-                  {enderecos[0]?.logradouro?.nome}
-                </Text>
-                <Text>Número: {usuario?.nroEndereco}</Text>{" "}
-                {/* Acessando nroEndereco do objeto usuario */}
-                <Text>Complemento: {usuario?.complemento}</Text>{" "}
-                {/* Acessando complemento do objeto usuario */}
-                <Text>Bairro: {enderecos[0]?.bairro?.nome}</Text>
-                <Text>
-                  Cidade: {enderecos[0]?.cidade?.nome},{" "}
-                  {enderecos[0]?.cidade?.unidadeFederativa?.sigla}
-                </Text>
-              </VStack>
-            ) : (
-              <Text>Endereço não disponível.</Text>
+    <View style={styles.background}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <View style={styles.section}>
+          <Text style={styles.title}>Perfil do Usuário</Text>
+          <View style={styles.centered}>
+            {usuario.fotoPerfil && (
+              <Image
+                source={{ uri: usuario.fotoPerfil }}
+                style={styles.profileImage}
+                resizeMode="cover"
+              />
             )}
-          </Box>
+            <Text style={styles.name}>
+              {usuario.nome} {usuario.sobrenome}
+            </Text>
+            <Text>Gênero: {usuario.genero}</Text>
+          </View>
+        </View>
 
-          {/* Seção de emails do usuário */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Emails</Heading>
-            {emails.length > 0 ? (
-              <Text>{emails[0]?.enderecoEmail}</Text>
-            ) : (
-              <Text>Email não disponível.</Text>
-            )}
-          </Box>
-
-          {/* Seção de telefones do usuário */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">Telefones</Heading>
-            {telefones.length > 0 ? (
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Endereço</Text>
+          {enderecos.length > 0 ? (
+            <>
+              <Text>CEP: {enderecos[0]?.cep}</Text>
               <Text>
-                ({telefones[0]?.ddd?.codigoArea}) {telefones[0]?.nroTelefone}
+                Logradouro: {enderecos[0]?.logradouro?.tipoLogradouro?.nome}{" "}
+                {enderecos[0]?.logradouro?.nome}
               </Text>
-            ) : (
-              <Text>Telefone não disponível.</Text>
-            )}
-          </Box>
+              <Text>Número: {usuario.nroEndereco}</Text>
+              <Text>Complemento: {usuario.complemento}</Text>
+              <Text>Bairro: {enderecos[0]?.bairro?.nome}</Text>
+              <Text>
+                Cidade: {enderecos[0]?.cidade?.nome},{" "}
+                {enderecos[0]?.cidade?.unidadeFederativa?.sigla}
+              </Text>
+            </>
+          ) : (
+            <Text>Endereço não disponível.</Text>
+          )}
+        </View>
 
-          {/* Seção de eventos em que o usuário participa */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">
-              Eventos Participados / a Participar
-            </Heading>
-            {eventosParticipantes.length > 0 ? (
-              eventosParticipantes.map((evento) => (
-                <Box key={evento.id} className="p-2 border-b border-gray-200">
-                  <Text className="font-semibold">{evento.descricao}</Text>
-                  <Text>Data: {evento.dataEvento}</Text>
-                  <Text>Local: {evento.local.descricao}</Text>
-                  <Text>Esporte: {evento.esporte.nome}</Text>
-                </Box>
-              ))
-            ) : (
-              <Text>Nenhum evento encontrado.</Text>
-            )}
-          </Box>
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Email</Text>
+          {emails.length > 0 ? (
+            <Text>{emails[0]?.enderecoEmail}</Text>
+          ) : (
+            <Text>Email não disponível.</Text>
+          )}
+        </View>
 
-          {/* Seção de eventos criados pelo usuário */}
-          <Box className="bg-white p-4 rounded-lg shadow-sm">
-            <Heading className="mb-2 text-lg font-bold">
-              Eventos Criados
-            </Heading>
-            {eventosCriados.length > 0 ? (
-              eventosCriados.map((evento) => (
-                <Box key={evento.id} className="p-2 border-b border-gray-200">
-                  <Text className="font-semibold">{evento.descricao}</Text>
-                  <Text>Data: {evento.dataEvento}</Text>
-                  <Text>Local: {evento.local.descricao}</Text>
-                  <Text>Esporte: {evento.esporte.nome}</Text>
-                </Box>
-              ))
-            ) : (
-              <Text>Nenhum evento criado.</Text>
-            )}
-          </Box>
-        </VStack>
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Telefone</Text>
+          {telefones.length > 0 ? (
+            <Text>
+              ({telefones[0]?.ddd?.codigoArea}) {telefones[0]?.nroTelefone}
+            </Text>
+          ) : (
+            <Text>Telefone não disponível.</Text>
+          )}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>
+            Eventos Participados / a Participar
+          </Text>
+          {eventosParticipantes.length > 0 ? (
+            eventosParticipantes.map((evento) => (
+              <View key={evento.id} style={styles.eventBox}>
+                <Text style={styles.eventTitle}>{evento.descricao}</Text>
+                <Text>Data: {evento.dataEvento}</Text>
+                <Text>Local: {evento.local.descricao}</Text>
+                <Text>Esporte: {evento.esporte.nome}</Text>
+              </View>
+            ))
+          ) : (
+            <Text>Nenhum evento encontrado.</Text>
+          )}
+        </View>
+
+        <View style={styles.section}>
+          <Text style={styles.subtitle}>Eventos Criados</Text>
+          {eventosCriados.length > 0 ? (
+            eventosCriados.map((evento) => (
+              <View key={evento.id} style={styles.eventBox}>
+                <Text style={styles.eventTitle}>{evento.descricao}</Text>
+                <Text>Data: {evento.dataEvento}</Text>
+                <Text>Local: {evento.local.descricao}</Text>
+                <Text>Esporte: {evento.esporte.nome}</Text>
+              </View>
+            ))
+          ) : (
+            <Text>Nenhum evento criado.</Text>
+          )}
+        </View>
       </ScrollView>
-    </Box>
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    backgroundColor: "#001A6E",
+    padding: 16,
+  },
+  section: {
+    backgroundColor: "#fff",
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 4,
+    elevation: 2,
+  },
+  centered: {
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 8,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  subtitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  name: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginTop: 8,
+  },
+  profileImage: {
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    borderWidth: 5,
+    borderColor: "#001A6E",
+  },
+  eventBox: {
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  eventTitle: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+});
 
 export default Profile;

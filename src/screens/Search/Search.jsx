@@ -6,12 +6,10 @@ import {
   TextInput,
   Button,
   StyleSheet,
+  ScrollView,
 } from "react-native";
-import { styles } from "./styles";
-import { VStack } from "@/components/ui/vstack";
 import EventList from "@/src/components/EventList";
 import { useState } from "react";
-import { Box } from "@/components/ui/box";
 import ApiService from "@/src/api/api";
 
 function Search() {
@@ -29,22 +27,21 @@ function Search() {
 
   const handleCreateEvent = async () => {
     const formatDate = (dateString) => {
-      if (!dateString) return ""; // Garante que não haja erro com valores vazios
-      const [year, month, day] = dateString.split("-"); // Divide no formato YYYY-MM-DD
-      return `${day}-${month}-${year}`; // Retorna no formato DD-MM-YYYY
+      if (!dateString) return "";
+      const [year, month, day] = dateString.split("-");
+      return `${day}-${month}-${year}`;
     };
+
     const eventToSend = {
       ...newEvent,
       dataEvento: formatDate(newEvent.dataEvento),
-      local: { id: parseInt(newEvent.local.id, 10) }, // Converte para número
-      esporte: { id: parseInt(newEvent.esporte.id, 10) }, // Converte para número
-      responsavel: { id: parseInt(newEvent.responsavel.id, 10) }, // Garante que seja número
+      local: { id: parseInt(newEvent.local.id, 10) },
+      esporte: { id: parseInt(newEvent.esporte.id, 10) },
+      responsavel: { id: parseInt(newEvent.responsavel.id, 10) },
     };
 
-    console.log("Dados enviados:", eventToSend);
-
     try {
-      const response = await ApiService.post("/eventos", eventToSend);
+      await ApiService.post("/eventos", eventToSend);
       alert("Evento criado com sucesso!");
       setModalVisible(false);
       setNewEvent({
@@ -64,83 +61,85 @@ function Search() {
 
   return (
     <View style={styles.container}>
-      <VStack className="flex flex-col justify-items-center items-center p-4">
-        <View style={styles.form}>
-          <TextInput
-            placeholder="Busque Eventos..."
-            placeholderTextColor="#bbb"
-            style={styles.input}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-        </View>
-        <Box className="w-[95vw] h-[100vh] m-2 border rounded-lg">
-          <EventList id="0" type="geral" searchQuery={searchQuery} />
-        </Box>
-      </VStack>
+      <View style={styles.form}>
+        <TextInput
+          placeholder="Busque Eventos..."
+          placeholderTextColor="#bbb"
+          style={styles.input}
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+      </View>
+
+      <View style={{ margin: 8, borderWidth: 1, borderRadius: 8 }}>
+        <EventList id="0" type="geral" searchQuery={searchQuery} />
+      </View>
 
       <TouchableOpacity
-        style={localStyles.fab}
+        style={styles.fab}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={localStyles.fabText}>+</Text>
+        <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
       <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={localStyles.modalContainer}>
-          <View style={localStyles.modalContent}>
-            <Text style={localStyles.modalTitle}>Criar Novo Evento</Text>
-            <input
-              type="text"
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Criar Novo Evento</Text>
+
+            <TextInput
+              style={styles.input}
               placeholder="Descrição"
               value={newEvent.descricao}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, descricao: e.target.value })
+              onChangeText={(text) =>
+                setNewEvent({ ...newEvent, descricao: text })
               }
             />
 
-            <input
-              type="date"
-              placeholder="Data"
+            <TextInput
+              style={styles.input}
+              placeholder="Data (AAAA-MM-DD)"
               value={newEvent.dataEvento}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, dataEvento: e.target.value })
+              onChangeText={(text) =>
+                setNewEvent({ ...newEvent, dataEvento: text })
               }
             />
 
-            <input
-              type="time"
+            <TextInput
+              style={styles.input}
               placeholder="Hora Inicial"
               value={newEvent.horaInicial}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, horaInicial: e.target.value })
+              onChangeText={(text) =>
+                setNewEvent({ ...newEvent, horaInicial: text })
               }
             />
 
-            <input
-              type="time"
+            <TextInput
+              style={styles.input}
               placeholder="Hora Final"
               value={newEvent.horaFinal}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, horaFinal: e.target.value })
+              onChangeText={(text) =>
+                setNewEvent({ ...newEvent, horaFinal: text })
               }
             />
 
-            <input
-              type="number"
+            <TextInput
+              style={styles.input}
               placeholder="ID do Local"
+              keyboardType="numeric"
               value={newEvent.local.id}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, local: { id: e.target.value } })
+              onChangeText={(text) =>
+                setNewEvent({ ...newEvent, local: { id: text } })
               }
             />
 
-            <input
-              type="number"
+            <TextInput
+              style={styles.input}
               placeholder="ID do Esporte"
+              keyboardType="numeric"
               value={newEvent.esporte.id}
-              onChange={(e) =>
-                setNewEvent({ ...newEvent, esporte: { id: e.target.value } })
+              onChangeText={(text) =>
+                setNewEvent({ ...newEvent, esporte: { id: text } })
               }
             />
 
@@ -157,7 +156,28 @@ function Search() {
   );
 }
 
-const localStyles = StyleSheet.create({
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#001A6E",
+    height: "100%",
+  },
+  form: {
+    alignItems: "center",
+    width: "100%",
+    flexDirection: "row",
+    padding: 10,
+  },
+  input: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#f5f5f5",
+    borderWidth: 2,
+    borderRadius: 6,
+    borderColor: "#ececec",
+    color: "#000",
+    fontSize: 16,
+    marginBottom: 10,
+  },
   fab: {
     position: "absolute",
     bottom: 30,
@@ -182,23 +202,16 @@ const localStyles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   modalContent: {
-    width: "80%",
+    width: "85%",
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
-  },
-  input: {
-    width: "100%",
-    borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
-    marginBottom: 10,
-    padding: 8,
+    marginBottom: 12,
+    textAlign: "center",
   },
 });
 
