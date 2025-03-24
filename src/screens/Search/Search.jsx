@@ -23,13 +23,29 @@ function Search() {
     dataEvento: "",
     horaInicial: "",
     horaFinal: "",
-    local: "",
-    esporte: "",
+    local: { id: "" },
+    esporte: { id: "" },
+    responsavel: { id: 1 },
   });
 
   const handleCreateEvent = async () => {
+    const formatDate = (dateString) => {
+      if (!dateString) return ""; // Garante que não haja erro com valores vazios
+      const [year, month, day] = dateString.split("-"); // Divide no formato YYYY-MM-DD
+      return `${day}-${month}-${year}`; // Retorna no formato DD-MM-YYYY
+    };
+    const eventToSend = {
+      ...newEvent,
+      dataEvento: formatDate(newEvent.dataEvento),
+      local: { id: parseInt(newEvent.local.id, 10) }, // Converte para número
+      esporte: { id: parseInt(newEvent.esporte.id, 10) }, // Converte para número
+      responsavel: { id: parseInt(newEvent.responsavel.id, 10) }, // Garante que seja número
+    };
+
+    console.log("Dados enviados:", eventToSend);
+
     try {
-      const response = await ApiService.post("/eventos", newEvent);
+      const response = await ApiService.post("/eventos", eventToSend);
       alert("Evento criado com sucesso!");
       setModalVisible(false);
       setNewEvent({
@@ -37,8 +53,9 @@ function Search() {
         dataEvento: "",
         horaInicial: "",
         horaFinal: "",
-        local: "",
-        esporte: "",
+        local: { id: "" },
+        esporte: { id: "" },
+        responsavel: { id: 1 },
       });
     } catch (error) {
       alert("Erro ao criar evento!");
@@ -74,50 +91,57 @@ function Search() {
         <View style={localStyles.modalContainer}>
           <View style={localStyles.modalContent}>
             <Text style={localStyles.modalTitle}>Criar Novo Evento</Text>
-            <TextInput
-              style={localStyles.input}
+            <input
+              type="text"
               placeholder="Descrição"
               value={newEvent.descricao}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, descricao: text })
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, descricao: e.target.value })
               }
             />
-            <TextInput
-              style={localStyles.input}
-              placeholder="Data (YYYY-MM-DD)"
+
+            <input
+              type="date"
+              placeholder="Data"
               value={newEvent.dataEvento}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, dataEvento: text })
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, dataEvento: e.target.value })
               }
             />
-            <TextInput
-              style={localStyles.input}
-              placeholder="Hora Inicial (HH:MM)"
+
+            <input
+              type="time"
+              placeholder="Hora Inicial"
               value={newEvent.horaInicial}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, horaInicial: text })
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, horaInicial: e.target.value })
               }
             />
-            <TextInput
-              style={localStyles.input}
-              placeholder="Hora Final (HH:MM)"
+
+            <input
+              type="time"
+              placeholder="Hora Final"
               value={newEvent.horaFinal}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, horaFinal: text })
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, horaFinal: e.target.value })
               }
             />
-            <TextInput
-              style={localStyles.input}
-              placeholder="Local"
-              value={newEvent.local}
-              onChangeText={(text) => setNewEvent({ ...newEvent, local: text })}
+
+            <input
+              type="number"
+              placeholder="ID do Local"
+              value={newEvent.local.id}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, local: { id: e.target.value } })
+              }
             />
-            <TextInput
-              style={localStyles.input}
-              placeholder="Esporte"
-              value={newEvent.esporte}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, esporte: text })
+
+            <input
+              type="number"
+              placeholder="ID do Esporte"
+              value={newEvent.esporte.id}
+              onChange={(e) =>
+                setNewEvent({ ...newEvent, esporte: { id: e.target.value } })
               }
             />
 

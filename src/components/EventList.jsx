@@ -10,12 +10,15 @@ import {
   Button,
 } from "react-native";
 import ApiService from "../api/api";
+import { useEventoParticipantes } from "../api/hooks/useEventoParticipantes";
 
 const EventList = ({ id, type, searchQuery, sportName }) => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [filteredEvents, setFilteredEvents] = useState([]);
+  const { fetchParticipanteById } = useEventoParticipantes();
+  const [participantesArray, setParticipantesArray] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -102,8 +105,9 @@ const EventList = ({ id, type, searchQuery, sportName }) => {
               <Text
                 style={styles.modalDetails}
               >{`Local: ${selectedEvent.local.descricao}`}</Text>
+
               <Button
-                style={{ margin: 5 }}
+                style={{ marginBottom: 5 }}
                 title="Inscrever-se"
                 onPress={() => alert("Inscrição realizada!")}
               />
