@@ -7,7 +7,6 @@ import {
   Button,
   StyleSheet,
 } from "react-native";
-import { Heading } from "@/components/ui/heading";
 import { styles } from "./styles";
 import { VStack } from "@/components/ui/vstack";
 import EventList from "@/src/components/EventList";
