@@ -71,7 +71,9 @@ function Search() {
         />
       </View>
 
-      <View style={{ margin: 8, borderWidth: 1, borderRadius: 8 }}>
+      <View
+        style={{ height: "84%", margin: 8, borderWidth: 1, borderRadius: 8 }}
+      >
         <EventList id="0" type="geral" searchQuery={searchQuery} />
       </View>
 
@@ -176,7 +178,7 @@ const styles = StyleSheet.create({
     borderColor: "#ececec",
     color: "#000",
     fontSize: 16,
-    marginBottom: 10,
+    marginTop: "10%",
   },
   fab: {
     position: "absolute",

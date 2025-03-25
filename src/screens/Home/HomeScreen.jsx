@@ -159,8 +159,10 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
+    gap: 10,
   },
   logo: {
+    marginTop: "10%",
     width: 300,
     height: 200,
   },

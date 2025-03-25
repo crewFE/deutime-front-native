@@ -63,7 +63,7 @@ function Profile() {
   return (
     <View style={styles.background}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.section}>
+        <View style={styles.mainSection}>
           <Text style={styles.title}>Perfil do Usuário</Text>
           <View style={styles.centered}>
             {usuario.fotoPerfil && (
@@ -76,7 +76,6 @@ function Profile() {
             <Text style={styles.name}>
               {usuario.nome} {usuario.sobrenome}
             </Text>
-            <Text>Gênero: {usuario.genero}</Text>
           </View>
         </View>
 
@@ -164,7 +163,19 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: "#001A6E",
+    paddingHorizontal: 16,
+  },
+  mainSection: {
+    backgroundColor: "#fff",
     padding: 16,
+    borderRadius: 8,
+    marginBottom: 16,
+    marginTop: "12%",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    shadowRadius: 4,
+    elevation: 2,
   },
   section: {
     backgroundColor: "#fff",
