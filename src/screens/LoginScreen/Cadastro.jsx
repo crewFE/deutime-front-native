@@ -66,6 +66,7 @@ export default function Cadastro({ voltar }) {
         <Text style={styles.titulo}>Cadastro</Text>
         <TextInput
           placeholder="Nome"
+          placeholderTextColor="#bbb"
           style={styles.input}
           value={newUser.usuario.nome}
           onChangeText={(text) =>
@@ -77,6 +78,7 @@ export default function Cadastro({ voltar }) {
         />
         <TextInput
           placeholder="Sobrenome"
+          placeholderTextColor="#bbb"
           style={styles.input}
           value={newUser.usuario.sobrenome}
           onChangeText={(text) =>
@@ -124,6 +126,7 @@ export default function Cadastro({ voltar }) {
         <TextInput
           placeholder="Email"
           style={styles.input}
+          placeholderTextColor="#bbb"
           keyboardType="email-address"
           value={newUser.email.enderecoEmail}
           onChangeText={(text) =>
@@ -133,6 +136,7 @@ export default function Cadastro({ voltar }) {
         <TextInput
           placeholder="Senha"
           style={styles.input}
+          placeholderTextColor="#bbb"
           secureTextEntry
           value={newUser.senha.senha}
           onChangeText={(text) =>
