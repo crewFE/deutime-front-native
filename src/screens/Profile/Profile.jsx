@@ -1,48 +1,32 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, ScrollView, Image, StyleSheet } from "react-native";
 import { usePacoteEvento } from "@/src/api/hooks/usePacoteEvento";
 import { useEventoParticipantes } from "@/src/api/hooks/useEventoParticipantes";
 import { usePacoteEndereco } from "@/src/api/hooks/usePacoteEndereco";
 import { usePacoteEmailUsuario } from "@/src/api/hooks/usePacoteEmailUsuario";
 import { useTelefoneUsuario } from "@/src/api/hooks/useTelefoneUsuario";
-
-// Dados do usuário fixos para teste
-const usuario = {
-  id: 3,
-  nome: "Cícero",
-  sobrenome: "Neves",
-  genero: "MASCULINO",
-  fotoPerfil:
-    "https://as2.ftcdn.net/v2/jpg/12/14/49/83/1000_F_1214498390_LmEZY3InP6vrZLmBVcspGOzemU6XfBmw.jpg",
-  nroEndereco: "106",
-  complemento: "CASA DOS FUNDOS",
-};
+import { usePacoteUsuario } from "@/src/api/hooks/usePacoteUsuario";
+import { AuthContext } from "@/src/context/AuthContext";
 
 function Profile() {
+  const { authData } = useContext(AuthContext);
   const { eventos, fetchEventos } = usePacoteEvento();
   const { participantes, fetchParticipantes } = useEventoParticipantes();
   const { enderecos, fetchEnderecoById } = usePacoteEndereco();
   const { emails, fetchEmailById } = usePacoteEmailUsuario();
   const { telefones, fetchTelefoneById } = useTelefoneUsuario();
+  const { usuario, fetchUsuarioById } = usePacoteUsuario();
   const [eventosCriados, setEventosCriados] = useState([]);
   const [eventosParticipantes, setEventosParticipantes] = useState([]);
 
   // Busca todos os eventos, participantes, endereço, email e telefone ao carregar a tela
   useEffect(() => {
-    fetchEventos();
-    fetchParticipantes();
-    fetchEnderecoById(usuario.id); // Buscar endereço com base no ID do usuário
-    fetchEmailById(usuario.id); // Buscar email com base no ID do usuário
-    fetchTelefoneById(usuario.id); // Buscar telefone com base no ID do usuário
+    fetchUsuarioById(authData?.userId);
+    fetchEnderecoById(authData?.userId);
+    fetchEmailById(authData?.userId);
+    fetchTelefoneById(authData?.userId);
+    console.log(usuario);
   }, []);
-
-  useEffect(() => {
-    console.log("Eventos1:", eventos);
-    console.log("Participantes1:", participantes);
-    console.log("Endereços:", enderecos);
-    console.log("Emails:", emails);
-    console.log("Telefones:", telefones);
-  }, [eventos, participantes, enderecos, emails, telefones]);
 
   // Filtra eventos criados e eventos em que o usuário participa
   useEffect(() => {
@@ -65,18 +49,24 @@ function Profile() {
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.mainSection}>
           <Text style={styles.title}>Perfil do Usuário</Text>
-          <View style={styles.centered}>
-            {usuario.fotoPerfil && (
+          {usuario && (
+            <View style={styles.centered}>
               <Image
-                source={{ uri: usuario.fotoPerfil }}
+                source={{
+                  uri:
+                    usuario?.fotoPerfil &&
+                    usuario.fotoPerfil.toLowerCase() !== "n/a"
+                      ? usuario.fotoPerfil
+                      : "https://i.imgur.com/1f3nK2Z.png", // imagem padrão
+                }}
                 style={styles.profileImage}
                 resizeMode="cover"
               />
-            )}
-            <Text style={styles.name}>
-              {usuario.nome} {usuario.sobrenome}
-            </Text>
-          </View>
+              <Text style={styles.name}>
+                {usuario?.nome || ""} {usuario?.sobrenome || ""}
+              </Text>
+            </View>
+          )}
         </View>
 
         <View style={styles.section}>
