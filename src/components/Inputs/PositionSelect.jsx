@@ -7,7 +7,6 @@ import {
   Platform,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import ApiService from "@/src/api/api";
 import { usePacoteEsporte } from "@/src/api/hooks/usePacoteEsporte";
 
 export default function PositionSelect({ selected, onChange, eventId }) {

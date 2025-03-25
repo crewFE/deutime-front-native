@@ -12,6 +12,7 @@ import {
 import { Menu } from "react-native-paper";
 import { ActivityIndicator } from "react-native";
 import useAuth from "@/src/api/hooks/auth/useAuth";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function Cadastro({ voltar }) {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -55,106 +56,113 @@ export default function Cadastro({ voltar }) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        {loading && (
-          <View style={styles.loadingOverlay}>
-            <ActivityIndicator size="large" color="#fff" />
-          </View>
-        )}
+    <LinearGradient
+      colors={["#2596be", "#001A6E"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          {loading && (
+            <View style={styles.loadingOverlay}>
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          )}
 
-        <Text style={styles.titulo}>Cadastro</Text>
-        <TextInput
-          placeholder="Nome"
-          placeholderTextColor="#bbb"
-          style={styles.input}
-          value={newUser.usuario.nome}
-          onChangeText={(text) =>
-            setNewUser({
-              ...newUser,
-              usuario: { ...newUser.usuario, nome: text },
-            })
-          }
-        />
-        <TextInput
-          placeholder="Sobrenome"
-          placeholderTextColor="#bbb"
-          style={styles.input}
-          value={newUser.usuario.sobrenome}
-          onChangeText={(text) =>
-            setNewUser({
-              ...newUser,
-              usuario: { ...newUser.usuario, sobrenome: text },
-            })
-          }
-        />
+          <Text style={styles.titulo}>CADASTRO</Text>
+          <TextInput
+            placeholder="Nome"
+            placeholderTextColor="#bbb"
+            style={styles.input}
+            value={newUser.usuario.nome}
+            onChangeText={(text) =>
+              setNewUser({
+                ...newUser,
+                usuario: { ...newUser.usuario, nome: text },
+              })
+            }
+          />
+          <TextInput
+            placeholder="Sobrenome"
+            placeholderTextColor="#bbb"
+            style={styles.input}
+            value={newUser.usuario.sobrenome}
+            onChangeText={(text) =>
+              setNewUser({
+                ...newUser,
+                usuario: { ...newUser.usuario, sobrenome: text },
+              })
+            }
+          />
 
-        <Menu
-          visible={menuVisible}
-          onDismiss={closeMenu}
-          anchor={
-            <TouchableOpacity style={styles.selectButton} onPress={openMenu}>
-              <Text style={styles.selectButtonText}>
-                {newUser.usuario.genero || "Selecionar gênero"}
-              </Text>
+          <Menu
+            visible={menuVisible}
+            onDismiss={closeMenu}
+            anchor={
+              <TouchableOpacity style={styles.selectButton} onPress={openMenu}>
+                <Text style={styles.selectButtonText}>
+                  {newUser.usuario.genero || "Selecionar gênero"}
+                </Text>
+              </TouchableOpacity>
+            }
+            contentStyle={styles.menuContent}
+          >
+            <Menu.Item
+              onPress={() => {
+                setNewUser({
+                  ...newUser,
+                  usuario: { ...newUser.usuario, genero: "Masculino" },
+                });
+                closeMenu();
+              }}
+              title="Masculino"
+            />
+            <Menu.Item
+              onPress={() => {
+                setNewUser({
+                  ...newUser,
+                  usuario: { ...newUser.usuario, genero: "Feminino" },
+                });
+                closeMenu();
+              }}
+              title="Feminino"
+            />
+          </Menu>
+
+          <TextInput
+            placeholder="Email"
+            style={styles.input}
+            placeholderTextColor="#bbb"
+            keyboardType="email-address"
+            value={newUser.email.enderecoEmail}
+            onChangeText={(text) =>
+              setNewUser({ ...newUser, email: { enderecoEmail: text } })
+            }
+          />
+          <TextInput
+            placeholder="Senha"
+            style={styles.input}
+            placeholderTextColor="#bbb"
+            secureTextEntry
+            value={newUser.senha.senha}
+            onChangeText={(text) =>
+              setNewUser({ ...newUser, senha: { senha: text } })
+            }
+          />
+
+          <View style={{ flexDirection: "row-reverse", gap: 2 }}>
+            <TouchableOpacity style={styles.botao} onPress={handleCreateUser}>
+              <Text style={styles.botaoTexto}>Cadastrar</Text>
             </TouchableOpacity>
-          }
-          contentStyle={styles.menuContent}
-        >
-          <Menu.Item
-            onPress={() => {
-              setNewUser({
-                ...newUser,
-                usuario: { ...newUser.usuario, genero: "Masculino" },
-              });
-              closeMenu();
-            }}
-            title="Masculino"
-          />
-          <Menu.Item
-            onPress={() => {
-              setNewUser({
-                ...newUser,
-                usuario: { ...newUser.usuario, genero: "Feminino" },
-              });
-              closeMenu();
-            }}
-            title="Feminino"
-          />
-        </Menu>
 
-        <TextInput
-          placeholder="Email"
-          style={styles.input}
-          placeholderTextColor="#bbb"
-          keyboardType="email-address"
-          value={newUser.email.enderecoEmail}
-          onChangeText={(text) =>
-            setNewUser({ ...newUser, email: { enderecoEmail: text } })
-          }
-        />
-        <TextInput
-          placeholder="Senha"
-          style={styles.input}
-          placeholderTextColor="#bbb"
-          secureTextEntry
-          value={newUser.senha.senha}
-          onChangeText={(text) =>
-            setNewUser({ ...newUser, senha: { senha: text } })
-          }
-        />
-
-        <View style={{ flexDirection: "row-reverse", gap: 2 }}>
-          <TouchableOpacity style={styles.botao} onPress={handleCreateUser}>
-            <Text style={styles.botaoTexto}>Cadastrar</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.botaoVoltar} onPress={voltar}>
-            <Text style={styles.botaoTexto}>Retornar</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={styles.botaoVoltar} onPress={voltar}>
+              <Text style={styles.botaoTexto}>Retornar</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </LinearGradient>
   );
 }
 
@@ -163,10 +171,10 @@ const styles = StyleSheet.create({
     padding: 24,
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#001A6E",
   },
   titulo: {
     fontSize: 28,
+    fontWeight: "800",
     color: "#fff",
     marginBottom: 20,
     textAlign: "center",
@@ -184,7 +192,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 12,
     borderWidth: 1,
-    borderColor: "#888",
+    borderColor: "#444",
     width: "70%",
   },
   botaoVoltar: {
@@ -194,7 +202,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 12,
     borderWidth: 1,
-    borderColor: "#888",
+    borderColor: "#444",
     width: "30%",
   },
   botaoTexto: {

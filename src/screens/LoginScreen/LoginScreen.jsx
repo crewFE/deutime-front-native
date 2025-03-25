@@ -12,6 +12,7 @@ import Cadastro from "./Cadastro";
 import { Menu, Button, Provider } from "react-native-paper";
 import useAuth from "@/src/api/hooks/auth/useAuth";
 import { ActivityIndicator } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -30,50 +31,57 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      {loading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#fff" />
+    <LinearGradient
+      colors={["#2596be", "#001A6E"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ flex: 1 }}
+    >
+      <View style={styles.container}>
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#fff" />
+          </View>
+        )}
+
+        <View style={styles.centered}>
+          <Image
+            source={require("../../../assets/logo.png")}
+            style={styles.logo}
+            resizeMode="contain"
+          />
         </View>
-      )}
-
-      <View style={styles.centered}>
-        <Image
-          source={require("../../../assets/logo.png")}
-          style={styles.logo}
-          resizeMode="contain"
+        <TextInput
+          placeholder="Email"
+          value={email}
+          onChangeText={setEmail}
+          style={styles.input}
+          keyboardType="email-address"
         />
-      </View>
-      <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-      />
-      <TextInput
-        placeholder="Senha"
-        value={password}
-        onChangeText={setPassword}
-        style={styles.input}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.botao} onPress={handleLogin}>
-        <Text style={styles.botaoTexto}>Entrar</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.botao}
-        onPress={() => setShowSignup(true)}
-      >
-        <Text style={styles.botaoTexto}>Cadastrar</Text>
-      </TouchableOpacity>
+        <TextInput
+          placeholder="Senha"
+          value={password}
+          onChangeText={setPassword}
+          style={styles.input}
+          secureTextEntry
+        />
+        <TouchableOpacity style={styles.botao} onPress={handleLogin}>
+          <Text style={styles.botaoTexto}>Entrar</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.botao}
+          onPress={() => setShowSignup(true)}
+        >
+          <Text style={styles.botaoTexto}>Cadastrar</Text>
+        </TouchableOpacity>
 
-      <Modal visible={showSignup} animationType="fade">
-        <Provider>
-          <Cadastro voltar={() => setShowSignup(false)} />
-        </Provider>
-      </Modal>
-    </View>
+        <Modal visible={showSignup} animationType="fade">
+          <Provider>
+            <Cadastro voltar={() => setShowSignup(false)} />
+          </Provider>
+        </Modal>
+      </View>
+    </LinearGradient>
   );
 }
 
@@ -82,7 +90,6 @@ const styles = StyleSheet.create({
     padding: 24,
     flex: 1,
     justifyContent: "center",
-    backgroundColor: "#001A6E",
   },
   titulo: {
     fontSize: 28,
@@ -103,7 +110,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 12,
     borderWidth: 1,
-    borderColor: "#888",
+    borderColor: "#444",
   },
   botaoTexto: {
     color: "#fff",
