@@ -30,7 +30,7 @@ export const useEventoParticipantes = () => {
       const response = await ApiService.get(
         `/eventoparticipantes/evento/${id}`
       );
-      setParticipantes([response.data]);
+      setParticipantes(response.data);
     } catch (err) {
       setError(err);
     } finally {

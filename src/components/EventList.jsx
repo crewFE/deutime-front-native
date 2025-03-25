@@ -6,11 +6,10 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
-  Modal,
-  Button,
 } from "react-native";
 import ApiService from "../api/api";
 import { useEventoParticipantes } from "../api/hooks/useEventoParticipantes";
+import EventDetailsModal from "./Modals/EventDetailsModal";
 
 const EventList = ({ id, type, searchQuery, sportName }) => {
   const [events, setEvents] = useState([]);
@@ -43,11 +42,11 @@ const EventList = ({ id, type, searchQuery, sportName }) => {
         case "court":
           endpoint = `/eventos/local/id/${id}`;
           break;
-        case "geral":
-          endpoint = `/eventos`;
-          break;
         case "sport":
           endpoint = `/eventos/esporte/${sportName}`;
+          break;
+        case "geral":
+          endpoint = `/eventos`;
           break;
         default:
           console.error("Tipo inválido:", type);
@@ -83,52 +82,25 @@ const EventList = ({ id, type, searchQuery, sportName }) => {
     <View style={styles.container}>
       <FlatList
         data={filteredEvents}
+        style={styles.flatlist}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
       />
 
-      <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          {selectedEvent && (
-            <View style={styles.modalContent}>
-              <Text style={styles.modalTitle}>{selectedEvent.descricao}</Text>
-              <Image
-                source={{ uri: selectedEvent.esporte.imagem }}
-                style={styles.modalImage}
-              />
-              <Text
-                style={styles.modalDetails}
-              >{`Data: ${selectedEvent.dataEvento}`}</Text>
-              <Text
-                style={styles.modalDetails}
-              >{`Horário: ${selectedEvent.horaInicial} - ${selectedEvent.horaFinal}`}</Text>
-              <Text
-                style={styles.modalDetails}
-              >{`Local: ${selectedEvent.local.descricao}`}</Text>
-
-              <Button
-                style={{ marginBottom: 5 }}
-                title="Inscrever-se"
-                onPress={() => alert("Inscrição realizada!")}
-              />
-
-              <Button
-                style={{ margin: 5 }}
-                title="Fechar"
-                onPress={() => setModalVisible(false)}
-              />
-            </View>
-          )}
-        </View>
-      </Modal>
+      <EventDetailsModal
+        visible={modalVisible}
+        event={selectedEvent}
+        onClose={() => setModalVisible(false)}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  flatlist: {
+    height: "100%",
     padding: 10,
+    margin: 10,
     backgroundColor: "#f5f5f5",
     borderWidth: 2,
     borderRadius: 6,
@@ -165,34 +137,6 @@ const styles = StyleSheet.create({
   location: {
     fontSize: 12,
     color: "#888",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
-  },
-  modalContent: {
-    width: "80%",
-    backgroundColor: "#fff",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
-  },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  modalImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 10,
-    marginBottom: 10,
-  },
-  modalDetails: {
-    fontSize: 14,
-    marginBottom: 5,
   },
 });
 

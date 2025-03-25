@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   logo: {
-    marginTop: "10%",
+    marginTop: -100,
     width: 300,
     height: 200,
   },

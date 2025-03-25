@@ -1,7 +1,5 @@
-import { Card } from "@/components/ui/card";
 import { useNavigation } from "@react-navigation/native";
-import { Heading } from "@/components/ui/heading";
-import { Image, TouchableOpacity, View } from "react-native";
+import { Image, TouchableOpacity, View, Text } from "react-native";
 
 export function ImageCard({ id, fotoURL, descricao, type }) {
   const navigation = useNavigation();
@@ -36,7 +34,7 @@ export function ImageCard({ id, fotoURL, descricao, type }) {
           resizeMode="cover"
         />
 
-        <Heading
+        <Text
           style={{
             textAlign: "center",
             textShadowColor: "rgb(0, 0, 0)",
@@ -50,7 +48,7 @@ export function ImageCard({ id, fotoURL, descricao, type }) {
           size="md"
         >
           {descricao}
-        </Heading>
+        </Text>
       </View>
     </TouchableOpacity>
   );

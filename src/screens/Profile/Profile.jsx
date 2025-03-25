@@ -52,13 +52,12 @@ function Profile() {
           {usuario && (
             <View style={styles.centered}>
               <Image
-                source={{
-                  uri:
-                    usuario?.fotoPerfil &&
-                    usuario.fotoPerfil.toLowerCase() !== "n/a"
-                      ? usuario.fotoPerfil
-                      : "https://i.imgur.com/1f3nK2Z.png", // imagem padrão
-                }}
+                source={
+                  usuario?.fotoPerfil &&
+                  usuario.fotoPerfil.toLowerCase() !== "n/a"
+                    ? { uri: usuario.fotoPerfil }
+                    : require("../../../assets/default-avatar.png")
+                }
                 style={styles.profileImage}
                 resizeMode="cover"
               />

@@ -5,6 +5,7 @@ export const usePacoteEsporte = () => {
   const [esportes, setEsportes] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [posicoes, setPosicoes] = useState([]);
 
   const fetchEsportes = async () => {
     setLoading(true);
@@ -30,6 +31,18 @@ export const usePacoteEsporte = () => {
     }
   };
 
+  const fetchPosicoesById = async (id) => {
+    setLoading(true);
+    try {
+      const response = await ApiService.get(`/posicoes/esporte/${id}`);
+      setPosicoes(response.data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const createModalidade = async (esporte) => {
     setLoading(true);
     try {
@@ -44,10 +57,12 @@ export const usePacoteEsporte = () => {
 
   return {
     esportes,
+    posicoes,
     error,
     loading,
     fetchEsportes,
     fetchEsporteById,
+    fetchPosicoesById,
     createModalidade,
   };
 };

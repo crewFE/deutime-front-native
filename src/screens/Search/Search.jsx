@@ -11,6 +11,7 @@ import {
 import EventList from "@/src/components/EventList";
 import { useState } from "react";
 import ApiService from "@/src/api/api";
+import CreateEventModal from "@/src/components/Modals/CreateEventModal";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,9 +72,7 @@ function Search() {
         />
       </View>
 
-      <View
-        style={{ height: "84%", margin: 8, borderWidth: 1, borderRadius: 8 }}
-      >
+      <View style={{ height: "85%" }}>
         <EventList id="0" type="geral" searchQuery={searchQuery} />
       </View>
 
@@ -84,76 +83,24 @@ function Search() {
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
-      <Modal visible={modalVisible} animationType="slide" transparent>
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Text style={styles.modalTitle}>Criar Novo Evento</Text>
-
-            <TextInput
-              style={styles.input}
-              placeholder="Descrição"
-              value={newEvent.descricao}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, descricao: text })
-              }
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Data (AAAA-MM-DD)"
-              value={newEvent.dataEvento}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, dataEvento: text })
-              }
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Hora Inicial"
-              value={newEvent.horaInicial}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, horaInicial: text })
-              }
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="Hora Final"
-              value={newEvent.horaFinal}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, horaFinal: text })
-              }
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="ID do Local"
-              keyboardType="numeric"
-              value={newEvent.local.id}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, local: { id: text } })
-              }
-            />
-
-            <TextInput
-              style={styles.input}
-              placeholder="ID do Esporte"
-              keyboardType="numeric"
-              value={newEvent.esporte.id}
-              onChangeText={(text) =>
-                setNewEvent({ ...newEvent, esporte: { id: text } })
-              }
-            />
-
-            <Button title="Criar Evento" onPress={handleCreateEvent} />
-            <Button
-              title="Cancelar"
-              color="red"
-              onPress={() => setModalVisible(false)}
-            />
-          </View>
-        </View>
-      </Modal>
+      <CreateEventModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        newEvent={newEvent}
+        setNewEvent={setNewEvent}
+        onSuccess={() => {
+          setModalVisible(false);
+          setNewEvent({
+            descricao: "",
+            dataEvento: "",
+            horaInicial: "",
+            horaFinal: "",
+            local: { id: "" },
+            esporte: { id: "" },
+            responsavel: { id: 1 },
+          });
+        }}
+      />
     </View>
   );
 }
