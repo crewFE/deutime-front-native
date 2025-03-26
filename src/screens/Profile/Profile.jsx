@@ -20,30 +20,38 @@ function Profile() {
   const [eventosParticipantes, setEventosParticipantes] = useState([]);
 
   // Busca todos os eventos, participantes, endereço, email e telefone ao carregar a tela
+  // useEffect(() => {
+  //   fetchUsuarioById(authData?.userId);
+  //   fetchEnderecoById(authData?.userId);
+  //   fetchEmailById(authData?.userId);
+  //   fetchTelefoneById(authData?.userId);
+  //   console.log(usuario);
+  // }, []);
+
   useEffect(() => {
     fetchUsuarioById(authData?.userId);
     fetchEnderecoById(authData?.userId);
     fetchEmailById(authData?.userId);
     fetchTelefoneById(authData?.userId);
-    console.log(usuario);
-  }, []);
+    fetchEventos();
+    fetchParticipantes();
+  }, [authData?.userId]);
 
   // Filtra eventos criados e eventos em que o usuário participa
   useEffect(() => {
-    if (eventos && participantes) {
-      // Filtra eventos criados pelo usuário
+    if (eventos && participantes && usuario) {
       const eventosCriadosFiltrados = eventos.filter(
         (evento) => evento.responsavel?.id === usuario.id
       );
       setEventosCriados(eventosCriadosFiltrados);
-
-      // Filtra eventos em que o usuário participa
+  
       const eventosParticipantesFiltrados = participantes
         .filter((participante) => participante.usuario?.id === usuario.id)
         .map((participante) => participante.evento);
       setEventosParticipantes(eventosParticipantesFiltrados);
     }
-  }, [eventos, participantes]);
+  }, [eventos, participantes, usuario]);
+  
   return (
     <View style={styles.background}>
       <ScrollView showsVerticalScrollIndicator={false}>
