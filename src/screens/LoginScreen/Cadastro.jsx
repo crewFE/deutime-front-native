@@ -29,21 +29,21 @@ export default function Cadastro({ voltar }) {
       nroEndereco: "1",
       complemento: "N/A",
     },
+    senha: "",
     email: {
       enderecoEmail: "",
-    },
-    senha: {
-      senha: "",
     },
   });
 
   const handleCreateUser = async () => {
+    console.log(newUser);
+
     if (
       !newUser.usuario.nome ||
       !newUser.usuario.sobrenome ||
       !newUser.usuario.genero ||
       !newUser.email.enderecoEmail ||
-      !newUser.senha.senha
+      !newUser.senha
     ) {
       Alert.alert("Preencha todos os campos obrigatórios.");
       return;
@@ -112,7 +112,7 @@ export default function Cadastro({ voltar }) {
               onPress={() => {
                 setNewUser({
                   ...newUser,
-                  usuario: { ...newUser.usuario, genero: "Masculino" },
+                  usuario: { ...newUser.usuario, genero: "MASCULINO" },
                 });
                 closeMenu();
               }}
@@ -122,7 +122,7 @@ export default function Cadastro({ voltar }) {
               onPress={() => {
                 setNewUser({
                   ...newUser,
-                  usuario: { ...newUser.usuario, genero: "Feminino" },
+                  usuario: { ...newUser.usuario, genero: "FEMININO" },
                 });
                 closeMenu();
               }}
@@ -145,10 +145,8 @@ export default function Cadastro({ voltar }) {
             style={styles.input}
             placeholderTextColor="#bbb"
             secureTextEntry
-            value={newUser.senha.senha}
-            onChangeText={(text) =>
-              setNewUser({ ...newUser, senha: { senha: text } })
-            }
+            value={newUser.senha}
+            onChangeText={(text) => setNewUser({ ...newUser, senha: text })}
           />
 
           <View style={{ flexDirection: "row-reverse", gap: 2 }}>

@@ -21,6 +21,8 @@ function Profile() {
 
   // Busca todos os eventos, participantes, endereço, email e telefone ao carregar a tela
   useEffect(() => {
+    fetchEventos();
+    fetchParticipantes();
     fetchUsuarioById(authData?.userId);
     fetchEnderecoById(authData?.userId);
     fetchEmailById(authData?.userId);
@@ -28,22 +30,20 @@ function Profile() {
     console.log(usuario);
   }, []);
 
-  // Filtra eventos criados e eventos em que o usuário participa
   useEffect(() => {
     if (eventos && participantes) {
-      // Filtra eventos criados pelo usuário
       const eventosCriadosFiltrados = eventos.filter(
-        (evento) => evento.responsavel?.id === usuario.id
+        (evento) => evento.responsavel?.id === authData?.userId
       );
       setEventosCriados(eventosCriadosFiltrados);
 
-      // Filtra eventos em que o usuário participa
       const eventosParticipantesFiltrados = participantes
-        .filter((participante) => participante.usuario?.id === usuario.id)
+        .filter((participante) => participante.usuario?.id === authData?.userId)
         .map((participante) => participante.evento);
       setEventosParticipantes(eventosParticipantesFiltrados);
     }
   }, [eventos, participantes]);
+
   return (
     <View style={styles.background}>
       <ScrollView showsVerticalScrollIndicator={false}>

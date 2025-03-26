@@ -87,26 +87,6 @@ function HomeScreen() {
             <Text style={styles.emptyText}>Nenhuma modalidade encontrada</Text>
           )}
         </ScrollView>
-        <View style={styles.section}>
-          <Text style={styles.titleHeader}>Regiões</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.horizontalScroll}
-          >
-            <View style={styles.row}>
-              {regioes.map((regiao) => (
-                <ImageCard
-                  key={regiao.id}
-                  id={regiao.id}
-                  descricao={regiao.descricao}
-                  fotoURL={regiao.fotoLocal}
-                  type="region"
-                />
-              ))}
-            </View>
-          </ScrollView>
-        </View>
 
         <View style={styles.section}>
           <Text style={styles.titleHeader}>Praças Esportivas</Text>
@@ -129,6 +109,28 @@ function HomeScreen() {
             </View>
           </ScrollView>
         </View>
+
+        <View style={styles.section}>
+          <Text style={styles.titleHeader}>Regiões</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalScroll}
+          >
+            <View style={styles.row}>
+              {regioes.map((regiao) => (
+                <ImageCard
+                  key={regiao.id}
+                  id={regiao.id}
+                  descricao={regiao.descricao}
+                  fotoURL={regiao.fotoLocal}
+                  type="region"
+                  disabled={true}
+                />
+              ))}
+            </View>
+          </ScrollView>
+        </View>
       </ScrollView>
     </LinearGradient>
   );
@@ -141,15 +143,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 0,
   },
-  section: {
-    marginBottom: 20,
-  },
+  section: {},
   titleHeader: {
     color: "#fafafa",
     fontSize: 36,
-    marginTop: 15,
     marginLeft: 10,
-    marginBottom: 14,
     textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 5,
