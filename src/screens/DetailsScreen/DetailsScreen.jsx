@@ -1,4 +1,3 @@
-import { Box } from "@/components/ui/box";
 import EventList from "@/src/components/EventList";
 import { View, Text, Image } from "react-native";
 
@@ -16,11 +15,16 @@ export default function DetailsScreen({ route }) {
     >
       <Image
         source={{ uri: fotoURL }}
-        style={{ width: "100%", height: "30%" }}
-      />
-      <Box
         style={{
-          height: "100%",
+          width: "100%",
+          height: "30%",
+          borderWidth: 1,
+          borderRadius: 6,
+          borderColor: "#777",
+        }}
+      />
+      <View
+        style={{
           width: "100%",
           borderRadius: 8,
           borderColor: "black",
@@ -38,7 +42,7 @@ export default function DetailsScreen({ route }) {
           }}
         >
           {descricao}
-        </Text>{" "}
+        </Text>
         <Text
           style={{
             color: "#fafafa",
@@ -49,14 +53,10 @@ export default function DetailsScreen({ route }) {
         >
           Eventos
         </Text>
-        <View
-          style={{
-            flex: 1,
-          }}
-        >
+        <View style={{ height: "75%" }}>
           <EventList id={id} type={type} sportName={sportName} />
         </View>
-      </Box>
+      </View>
     </View>
   );
 }

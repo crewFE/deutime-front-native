@@ -10,13 +10,13 @@ import {
   Alert,
   ActivityIndicator,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from "react-native";
 import Cadastro from "./Cadastro";
 import { Provider } from "react-native-paper";
 import useAuth from "@/src/api/hooks/auth/useAuth";
-import GoogleLoginButton from '../../components/GoogleLoginButton';
-import { jwtDecode } from 'jwt-decode';
+import GoogleLoginButton from "../../components/GoogleLoginButton";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
@@ -36,12 +36,10 @@ export default function LoginScreen({ navigation }) {
 
   const handleGoogleSuccess = async (response) => {
     console.log("Login Google bem-sucedido:", response);
-    
     await signInWithGoogle(response, () => {
-      console.log("Navegando para AppTabs...");
       navigation.replace("AppTabs");
     });
-  };  
+  };
 
   const handleGoogleError = (error) => {
     console.log("Erro no login Google:", error);
@@ -49,84 +47,85 @@ export default function LoginScreen({ navigation }) {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={styles.container}
+    <LinearGradient
+      colors={["#2596be", "#001A6E"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ flex: 1 }}
     >
-      {loading && (
-        <View style={styles.loadingOverlay}>
-          <ActivityIndicator size="large" color="#fff" />
-        </View>
-      )}
-
-      <View style={styles.contentContainer}>
-        <View style={styles.logoContainer}>
-          <Image
-            source={require("../../../assets/logo.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
-        </View>
-
-        <View style={styles.formContainer}>
-          <TextInput
-            placeholder="Email"
-            placeholderTextColor="#999"
-            value={email}
-            onChangeText={setEmail}
-            style={styles.input}
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <TextInput
-            placeholder="Senha"
-            placeholderTextColor="#999"
-            value={password}
-            onChangeText={setPassword}
-            style={styles.input}
-            secureTextEntry
-          />
-
-          <TouchableOpacity 
-            style={styles.botaoPrimario} 
-            onPress={handleLogin}
-          >
-            <Text style={styles.botaoTexto}>Entrar</Text>
-          </TouchableOpacity>
-
-          <View style={styles.dividerContainer}>
-            <View style={styles.dividerLine} />
-            <Text style={styles.dividerText}>ou</Text>
-            <View style={styles.dividerLine} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
+        {loading && (
+          <View style={styles.loadingOverlay}>
+            <ActivityIndicator size="large" color="#fff" />
           </View>
-
-          <GoogleLoginButton 
-            onSuccess={handleGoogleSuccess}
-            onError={handleGoogleError}
-          />
-
-          <TouchableOpacity
-            style={styles.botaoSecundario}
-            onPress={() => setShowSignup(true)}
-          >
-            <Text style={styles.botaoSecundarioTexto}>Criar uma conta</Text>
-          </TouchableOpacity>
+        )}
+        <View style={styles.contentContainer}>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../../../assets/logo.png")}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.formContainer}>
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor="#999"
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <TextInput
+              placeholder="Senha"
+              placeholderTextColor="#999"
+              value={password}
+              onChangeText={setPassword}
+              style={styles.input}
+              secureTextEntry
+            />
+            <TouchableOpacity
+              style={styles.botaoPrimario}
+              onPress={handleLogin}
+            >
+              <Text style={styles.botaoTexto}>Entrar</Text>
+            </TouchableOpacity>
+            <View style={styles.dividerContainer}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>ou</Text>
+              <View style={styles.dividerLine} />
+            </View>
+            <GoogleLoginButton
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+            />
+            <TouchableOpacity
+              style={styles.botaoSecundario}
+              onPress={() => setShowSignup(true)}
+            >
+              <Text style={styles.botaoSecundarioTexto}>Criar uma conta</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-
-      <Modal visible={showSignup} animationType="fade">
-        <Provider>
-          <Cadastro voltar={() => setShowSignup(false)} />
-        </Provider>
-      </Modal>
-    </KeyboardAvoidingView>
+        <Modal visible={showSignup} animationType="fade">
+          <Provider>
+            <Cadastro voltar={() => setShowSignup(false)} />
+          </Provider>
+        </Modal>
+      </KeyboardAvoidingView>
+    </LinearGradient>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#001A6E",
+    justifyContent: "center",
   },
   contentContainer: {
     flex: 1,
@@ -171,6 +170,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginTop: 15,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: "#444",
   },
   botaoTexto: {
     color: "#fff",
@@ -181,6 +183,10 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     textDecorationLine: 'underline',
+  logo: {
+    marginTop: -100,
+    width: 300,
+    height: 200,
   },
   dividerContainer: {
     flexDirection: 'row',
