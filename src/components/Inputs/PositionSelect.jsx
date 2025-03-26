@@ -9,11 +9,16 @@ import {
 import { Picker } from "@react-native-picker/picker";
 import { usePacoteEsporte } from "@/src/api/hooks/usePacoteEsporte";
 
-export default function PositionSelect({ selected, onChange, eventId }) {
+export default function PositionSelect({
+  selected,
+  onChange,
+  eventId,
+  sportId,
+}) {
   const { loading, posicoes, fetchPosicoesById } = usePacoteEsporte();
 
   useEffect(() => {
-    fetchPosicoesById(eventId);
+    fetchPosicoesById(sportId);
   }, []);
 
   if (loading) return <ActivityIndicator size="small" color="#000" />;
@@ -30,6 +35,7 @@ export default function PositionSelect({ selected, onChange, eventId }) {
           style={styles.picker}
           dropdownIconColor="#000"
         >
+          <Picker.Item label="Selecione um..." value="" color="#999" />
           {posicoes.map((posicao) => (
             <Picker.Item
               key={posicao.id}

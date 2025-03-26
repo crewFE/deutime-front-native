@@ -38,7 +38,13 @@ export const useEventoParticipantes = () => {
     }
   };
 
-  // Não testado
+  /* 
+    {
+      "evento": {id: ""}
+      "usuario": {id: ""}
+      "posicao": {id: ""}
+    }
+    */
   const createParticipante = async (participante) => {
     setLoading(true);
     try {
@@ -49,6 +55,7 @@ export const useEventoParticipantes = () => {
       setParticipantes((prevData) => [...prevData, response.data]);
     } catch (err) {
       setError(err);
+      throw err;
     } finally {
       setLoading(false);
     }

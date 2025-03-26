@@ -18,7 +18,7 @@ export default function AppTabs() {
           let iconName =
             route.name === "Home"
               ? "home"
-              : route.name === "Search"
+              : route.name === "Buscar"
               ? "magnify"
               : "account-circle";
           return <Icon name={iconName} size={size} color={color} />;
@@ -26,8 +26,8 @@ export default function AppTabs() {
       })}
     >
       <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Search" component={Search} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Buscar" component={Search} />
+      <Tab.Screen name="Perfil" component={Profile} />
     </Tab.Navigator>
   );
 }

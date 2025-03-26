@@ -31,6 +31,11 @@ const EventDetailsModal = ({ visible, event, onClose }) => {
     </View>
   );
 
+  const handleClose = () => {
+    setSignUpVisible(false);
+    fetchParticipanteById(event.id);
+  };
+
   return (
     <Modal visible={visible} animationType="fade" transparent>
       <View style={styles.modalContainer}>
@@ -89,8 +94,9 @@ const EventDetailsModal = ({ visible, event, onClose }) => {
 
       <EventSignUpModal
         visible={signUpVisible}
-        onClose={() => setSignUpVisible(false)}
-        eventId={event?.esporte.id}
+        onClose={() => handleClose()}
+        eventId={event?.id}
+        sportId={event?.esporte.id}
       />
     </Modal>
   );
