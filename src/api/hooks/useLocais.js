@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import ApiService from '../api';
+import { useState } from "react";
+import ApiService from "../api";
 
 export const usePacoteLocal = () => {
   const [locais, setLocais] = useState([]);
@@ -9,7 +9,7 @@ export const usePacoteLocal = () => {
   const fetchLocais = async () => {
     setLoading(true);
     try {
-      const response = await ApiService.get('/locais');
+      const response = await ApiService.get("/locais");
       setLocais(response.data.content);
     } catch (err) {
       setError(err);
@@ -33,7 +33,7 @@ export const usePacoteLocal = () => {
   const createLocal = async (local) => {
     setLoading(true);
     try {
-      const response = await ApiService.post('/locais', local);
+      const response = await ApiService.post("/locais", local);
       setLocais((prevData) => [...prevData, response.data]);
     } catch (err) {
       setError(err);
@@ -47,9 +47,7 @@ export const usePacoteLocal = () => {
     try {
       const response = await ApiService.put(`/locais/${id}`, updatedLocal);
       setLocais((prevData) =>
-        prevData.map((local) =>
-          local.id === id ? response.data : local
-        )
+        prevData.map((local) => (local.id === id ? response.data : local))
       );
     } catch (err) {
       setError(err);
@@ -75,6 +73,7 @@ export const usePacoteLocal = () => {
     error,
     loading,
     fetchLocais,
+    setLocais,
     fetchLocalById,
     createLocal,
     updateLocal,

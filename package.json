@@ -52,6 +52,7 @@
     "babel-plugin-module-resolver": "^5.0.2",
     "expo": "~52.0.23",
     "expo-dev-client": "^5.0.15",
+    "expo-linear-gradient": "~14.0.2",
     "expo-status-bar": "~2.0.0",
     "lucide-react": "^0.476.0",
     "react": "^18.3.1",

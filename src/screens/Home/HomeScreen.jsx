@@ -4,6 +4,7 @@ import { usePacoteEsporte } from "@/src/api/hooks/usePacoteEsporte";
 import { usePacoteLocal } from "@/src/api/hooks/useLocais";
 import { ImageCard } from "@/src/components/ImageCard";
 import TextCard from "@/src/components/TextCard";
+import { LinearGradient } from "expo-linear-gradient";
 
 function HomeScreen() {
   const { esportes, loading, fetchEsportes } = usePacoteEsporte();
@@ -46,7 +47,12 @@ function HomeScreen() {
   const locaisArray = Array.isArray(locais) ? locais : [];
 
   return (
-    <View style={styles.background}>
+    <LinearGradient
+      colors={["#2596be", "#001A6E"]}
+      start={{ x: 0, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={{ flex: 1 }}
+    >
       <ScrollView showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
           <View style={styles.centered}>
@@ -56,53 +62,31 @@ function HomeScreen() {
               resizeMode="contain"
             />
           </View>
-          <Text style={styles.titleHeader}>Modalidades</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.horizontalScroll}
-          >
-            {modalidades.length > 0 ? (
-              <View style={styles.row}>
-                {modalidades.map((modalidade) => (
-                  <TextCard
-                    key={modalidade.id}
-                    id={modalidade.id}
-                    descricao={modalidade.nome}
-                    fotoURL={modalidade.imagem}
-                    type={"sport"}
-                    sportName={modalidade.nome}
-                  />
-                ))}
-              </View>
-            ) : (
-              <Text style={styles.emptyText}>
-                Nenhuma modalidade encontrada
-              </Text>
-            )}
-          </ScrollView>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.titleHeader}>Regiões</Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.horizontalScroll}
-          >
+        <Text style={styles.titleHeader}>Modalidades</Text>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={styles.horizontalScroll}
+        >
+          {modalidades.length > 0 ? (
             <View style={styles.row}>
-              {regioes.map((regiao) => (
-                <ImageCard
-                  key={regiao.id}
-                  id={regiao.id}
-                  descricao={regiao.descricao}
-                  fotoURL={regiao.fotoLocal}
-                  type="region"
+              {modalidades.map((modalidade) => (
+                <TextCard
+                  key={modalidade.id}
+                  id={modalidade.id}
+                  descricao={modalidade.nome}
+                  fotoURL={modalidade.imagem}
+                  type={"sport"}
+                  sportName={modalidade.nome}
                 />
               ))}
             </View>
-          </ScrollView>
-        </View>
+          ) : (
+            <Text style={styles.emptyText}>Nenhuma modalidade encontrada</Text>
+          )}
+        </ScrollView>
 
         <View style={styles.section}>
           <Text style={styles.titleHeader}>Praças Esportivas</Text>
@@ -125,8 +109,30 @@ function HomeScreen() {
             </View>
           </ScrollView>
         </View>
+
+        <View style={styles.section}>
+          <Text style={styles.titleHeader}>Regiões</Text>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={styles.horizontalScroll}
+          >
+            <View style={styles.row}>
+              {regioes.map((regiao) => (
+                <ImageCard
+                  key={regiao.id}
+                  id={regiao.id}
+                  descricao={regiao.descricao}
+                  fotoURL={regiao.fotoLocal}
+                  type="region"
+                  disabled={true}
+                />
+              ))}
+            </View>
+          </ScrollView>
+        </View>
       </ScrollView>
-    </View>
+    </LinearGradient>
   );
 }
 
@@ -137,15 +143,11 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     padding: 0,
   },
-  section: {
-    marginBottom: 20,
-  },
+  section: {},
   titleHeader: {
     color: "#fafafa",
     fontSize: 36,
-    marginTop: 15,
     marginLeft: 10,
-    marginBottom: 14,
     textShadowColor: "rgba(0, 0, 0, 0.75)",
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 5,
@@ -162,7 +164,7 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   logo: {
-    marginTop: "10%",
+    marginTop: "15%",
     width: 300,
     height: 200,
   },
