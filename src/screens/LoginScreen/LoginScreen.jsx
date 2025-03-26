@@ -121,7 +121,6 @@ export default function LoginScreen({ navigation }) {
   );
 }
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -129,11 +128,11 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
     paddingHorizontal: 30,
   },
   logoContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 40,
   },
   logo: {
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     height: 150,
   },
   formContainer: {
-    width: '100%',
+    width: "100%",
   },
   input: {
     backgroundColor: "#fff",
@@ -149,9 +148,9 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 15,
     fontSize: 16,
-    color: '#333',
+    color: "#333",
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   botaoPrimario: {
     backgroundColor: "#0051FF",
@@ -160,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
     elevation: 3,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -182,24 +181,25 @@ const styles = StyleSheet.create({
   botaoSecundarioTexto: {
     color: "#fff",
     fontSize: 16,
-    textDecorationLine: 'underline',
+    textDecorationLine: "underline",
+  },
   logo: {
     marginTop: -100,
     width: 300,
     height: 200,
   },
   dividerContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginVertical: 20,
   },
   dividerLine: {
     flex: 1,
     height: 1,
-    backgroundColor: 'rgba(255,255,255,0.3)',
+    backgroundColor: "rgba(255,255,255,0.3)",
   },
   dividerText: {
-    color: '#fff',
+    color: "#fff",
     paddingHorizontal: 10,
     fontSize: 14,
   },
