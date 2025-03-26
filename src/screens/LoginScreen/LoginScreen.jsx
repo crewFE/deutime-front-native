@@ -7,18 +7,22 @@ import {
   StyleSheet,
   Image,
   Modal,
+  Alert,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Cadastro from "./Cadastro";
-import { Menu, Button, Provider } from "react-native-paper";
+import { Provider } from "react-native-paper";
 import useAuth from "@/src/api/hooks/auth/useAuth";
-import { ActivityIndicator } from "react-native";
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 import { LinearGradient } from "expo-linear-gradient";
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showSignup, setShowSignup] = useState(false);
-  const { loading, signIn } = useAuth();
+  const { loading, signIn, signInWithGoogle } = useAuth();
 
   const handleLogin = () => {
     if (email && password) {
@@ -26,8 +30,20 @@ export default function LoginScreen({ navigation }) {
         navigation.replace("AppTabs");
       });
     } else {
-      alert("Preencha email e senha");
+      Alert.alert("Atenção", "Preencha email e senha");
     }
+  };
+
+  const handleGoogleSuccess = async (response) => {
+    console.log("Login Google bem-sucedido:", response);
+    await signInWithGoogle(response, () => {
+      navigation.replace("AppTabs");
+    });
+  };
+
+  const handleGoogleError = (error) => {
+    console.log("Erro no login Google:", error);
+    Alert.alert("Erro", "Falha no login com Google");
   };
 
   return (
@@ -37,77 +53,123 @@ export default function LoginScreen({ navigation }) {
       end={{ x: 1, y: 1 }}
       style={{ flex: 1 }}
     >
-      <View style={styles.container}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={styles.container}
+      >
         {loading && (
           <View style={styles.loadingOverlay}>
             <ActivityIndicator size="large" color="#fff" />
           </View>
         )}
-
-        <View style={styles.centered}>
-          <Image
-            source={require("../../../assets/logo.png")}
-            style={styles.logo}
-            resizeMode="contain"
-          />
+        <View style={styles.contentContainer}>
+          <View style={styles.logoContainer}>
+            <Image
+              source={require("../../../assets/logo.png")}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+          </View>
+          <View style={styles.formContainer}>
+            <TextInput
+              placeholder="Email"
+              placeholderTextColor="#999"
+              value={email}
+              onChangeText={setEmail}
+              style={styles.input}
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <TextInput
+              placeholder="Senha"
+              placeholderTextColor="#999"
+              value={password}
+              onChangeText={setPassword}
+              style={styles.input}
+              secureTextEntry
+            />
+            <TouchableOpacity
+              style={styles.botaoPrimario}
+              onPress={handleLogin}
+            >
+              <Text style={styles.botaoTexto}>Entrar</Text>
+            </TouchableOpacity>
+            <View style={styles.dividerContainer}>
+              <View style={styles.dividerLine} />
+              <Text style={styles.dividerText}>ou</Text>
+              <View style={styles.dividerLine} />
+            </View>
+            <GoogleLoginButton
+              onSuccess={handleGoogleSuccess}
+              onError={handleGoogleError}
+            />
+            <TouchableOpacity
+              style={styles.botaoSecundario}
+              onPress={() => setShowSignup(true)}
+            >
+              <Text style={styles.botaoSecundarioTexto}>Criar uma conta</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-        <TextInput
-          placeholder="Email"
-          value={email}
-          onChangeText={setEmail}
-          style={styles.input}
-          keyboardType="email-address"
-        />
-        <TextInput
-          placeholder="Senha"
-          value={password}
-          onChangeText={setPassword}
-          style={styles.input}
-          secureTextEntry
-        />
-        <TouchableOpacity style={styles.botao} onPress={handleLogin}>
-          <Text style={styles.botaoTexto}>Entrar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.botao}
-          onPress={() => setShowSignup(true)}
-        >
-          <Text style={styles.botaoTexto}>Cadastrar</Text>
-        </TouchableOpacity>
-
         <Modal visible={showSignup} animationType="fade">
           <Provider>
             <Cadastro voltar={() => setShowSignup(false)} />
           </Provider>
         </Modal>
-      </View>
+      </KeyboardAvoidingView>
     </LinearGradient>
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
-    padding: 24,
     flex: 1,
     justifyContent: "center",
   },
-  titulo: {
-    fontSize: 28,
-    color: "#fff",
-    marginBottom: 20,
-    textAlign: "center",
+  contentContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 30,
+  },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: 40,
+  },
+  logo: {
+    width: 250,
+    height: 150,
+  },
+  formContainer: {
+    width: '100%',
   },
   input: {
     backgroundColor: "#fff",
-    padding: 12,
-    borderRadius: 6,
-    marginBottom: 12,
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 15,
+    fontSize: 16,
+    color: '#333',
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
-  botao: {
+  botaoPrimario: {
     backgroundColor: "#0051FF",
-    padding: 14,
-    borderRadius: 6,
+    padding: 16,
+    borderRadius: 8,
     alignItems: "center",
+    marginTop: 10,
+    elevation: 3,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  botaoSecundario: {
+    padding: 16,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 15,
     marginTop: 12,
     borderWidth: 1,
     borderColor: "#444",
@@ -115,23 +177,34 @@ const styles = StyleSheet.create({
   botaoTexto: {
     color: "#fff",
     fontWeight: "bold",
-    textAlign: "center",
+    fontSize: 16,
   },
+  botaoSecundarioTexto: {
+    color: "#fff",
+    fontSize: 16,
+    textDecorationLine: 'underline',
   logo: {
     marginTop: -100,
     width: 300,
     height: 200,
   },
-  centered: {
-    justifyContent: "center",
-    alignItems: "center",
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: 'rgba(255,255,255,0.3)',
+  },
+  dividerText: {
+    color: '#fff',
+    paddingHorizontal: 10,
+    fontSize: 14,
   },
   loadingOverlay: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    ...StyleSheet.absoluteFillObject,
     backgroundColor: "rgba(0,0,0,0.4)",
     justifyContent: "center",
     alignItems: "center",

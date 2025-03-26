@@ -20,6 +20,14 @@ function Profile() {
   const [eventosParticipantes, setEventosParticipantes] = useState([]);
 
   // Busca todos os eventos, participantes, endereço, email e telefone ao carregar a tela
+  // useEffect(() => {
+  //   fetchUsuarioById(authData?.userId);
+  //   fetchEnderecoById(authData?.userId);
+  //   fetchEmailById(authData?.userId);
+  //   fetchTelefoneById(authData?.userId);
+  //   console.log(usuario);
+  // }, []);
+
   useEffect(() => {
     fetchEventos();
     fetchParticipantes();
@@ -27,11 +35,12 @@ function Profile() {
     fetchEnderecoById(authData?.userId);
     fetchEmailById(authData?.userId);
     fetchTelefoneById(authData?.userId);
-    console.log(usuario);
-  }, []);
+    fetchEventos();
+    fetchParticipantes();
+  }, [authData?.userId]);
 
   useEffect(() => {
-    if (eventos && participantes) {
+    if (eventos && participantes && usuario) {
       const eventosCriadosFiltrados = eventos.filter(
         (evento) => evento.responsavel?.id === authData?.userId
       );
@@ -42,7 +51,7 @@ function Profile() {
         .map((participante) => participante.evento);
       setEventosParticipantes(eventosParticipantesFiltrados);
     }
-  }, [eventos, participantes]);
+  }, [eventos, participantes, usuario]);
 
   return (
     <View style={styles.background}>

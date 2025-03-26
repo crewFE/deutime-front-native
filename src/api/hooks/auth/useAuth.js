@@ -27,6 +27,58 @@ export default function useAuth() {
     }
   };
 
+  const signInWithGoogle = async (googleData, onSuccess) => {
+    console.log("Google data received:", googleData);
+  
+    const fullName = googleData.name;
+    const [firstName, ...lastNameParts] = fullName.split(" ");
+    const lastName = lastNameParts.join(" ") || "";
+    const email = googleData.email;
+    const defaultPassword = googleData.sub;
+    const fotoPerfil = googleData.picture || "N/A";
+  
+    const userData = {
+      usuario: {
+        nome: firstName,
+        sobrenome: lastName,
+        genero: "FEMININO",
+        fotoPerfil: fotoPerfil,
+        nroEndereco: "1",
+        complemento: "N/A",
+      },
+      email: {
+        enderecoEmail: email,
+      },
+      senha: defaultPassword,
+    };
+  
+    console.log("User data to be registered:", userData);
+  
+    try {
+      console.log("Attempting user registration...");
+      await signUp(userData);
+      console.log("User registered successfully. Proceeding to login...");
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.message === "Conta já existe") {
+        console.log("Account already exists. Proceeding to login...");
+      } else {
+        console.error("Unexpected error during sign-up:", error);
+        return;
+      }
+    }
+  
+    console.log("Attempting to log in...");
+    try {
+      await signIn(email, defaultPassword, (authData) => {
+        console.log("Login successful. Updating session...");
+        setAuthContextData(authData);
+        onSuccess?.(); // Chamando o callback após login bem-sucedido
+      });
+    } catch (error) {
+      console.error("Login failed:", error);
+    }
+  };
+
   const signIn = async (email, password, onSuccess) => {
     if (!email || !password) {
       Alert.alert("Warning", "Please enter email and password.");
@@ -67,5 +119,6 @@ export default function useAuth() {
     loading,
     signUp,
     signIn,
+    signInWithGoogle
   };
 }
