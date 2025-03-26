@@ -61,6 +61,7 @@ export const usePacoteEsporte = () => {
     error,
     loading,
     fetchEsportes,
+    setEsportes,
     fetchEsporteById,
     fetchPosicoesById,
     createModalidade,

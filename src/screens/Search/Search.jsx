@@ -2,62 +2,21 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Modal,
   TextInput,
-  Button,
   StyleSheet,
-  ScrollView,
 } from "react-native";
 import EventList from "@/src/components/EventList";
 import { useState } from "react";
-import ApiService from "@/src/api/api";
 import CreateEventModal from "@/src/components/Modals/CreateEventModal";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");
   const [modalVisible, setModalVisible] = useState(false);
-  const [newEvent, setNewEvent] = useState({
-    descricao: "",
-    dataEvento: "",
-    horaInicial: "",
-    horaFinal: "",
-    local: { id: "" },
-    esporte: { id: "" },
-    responsavel: { id: 1 },
-  });
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  const handleCreateEvent = async () => {
-    const formatDate = (dateString) => {
-      if (!dateString) return "";
-      const [year, month, day] = dateString.split("-");
-      return `${day}-${month}-${year}`;
-    };
-
-    const eventToSend = {
-      ...newEvent,
-      dataEvento: formatDate(newEvent.dataEvento),
-      local: { id: parseInt(newEvent.local.id, 10) },
-      esporte: { id: parseInt(newEvent.esporte.id, 10) },
-      responsavel: { id: parseInt(newEvent.responsavel.id, 10) },
-    };
-
-    try {
-      await ApiService.post("/eventos", eventToSend);
-      alert("Evento criado com sucesso!");
-      setModalVisible(false);
-      setNewEvent({
-        descricao: "",
-        dataEvento: "",
-        horaInicial: "",
-        horaFinal: "",
-        local: { id: "" },
-        esporte: { id: "" },
-        responsavel: { id: 1 },
-      });
-    } catch (error) {
-      alert("Erro ao criar evento!");
-      console.error(error);
-    }
+  const handleClose = () => {
+    setModalVisible(false);
+    setRefreshTrigger((prev) => prev + 1);
   };
 
   return (
@@ -73,7 +32,12 @@ function Search() {
       </View>
 
       <View style={{ height: "85%" }}>
-        <EventList id="0" type="geral" searchQuery={searchQuery} />
+        <EventList
+          id="0"
+          type="geral"
+          searchQuery={searchQuery}
+          refreshTrigger={refreshTrigger}
+        />
       </View>
 
       <TouchableOpacity
@@ -83,24 +47,7 @@ function Search() {
         <Text style={styles.fabText}>+</Text>
       </TouchableOpacity>
 
-      <CreateEventModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        newEvent={newEvent}
-        setNewEvent={setNewEvent}
-        onSuccess={() => {
-          setModalVisible(false);
-          setNewEvent({
-            descricao: "",
-            dataEvento: "",
-            horaInicial: "",
-            horaFinal: "",
-            local: { id: "" },
-            esporte: { id: "" },
-            responsavel: { id: 1 },
-          });
-        }}
-      />
+      <CreateEventModal visible={modalVisible} onClose={() => handleClose()} />
     </View>
   );
 }

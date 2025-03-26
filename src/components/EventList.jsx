@@ -11,7 +11,7 @@ import ApiService from "../api/api";
 import { useEventoParticipantes } from "../api/hooks/useEventoParticipantes";
 import EventDetailsModal from "./Modals/EventDetailsModal";
 
-const EventList = ({ id, type, searchQuery, sportName }) => {
+const EventList = ({ id, type, searchQuery, sportName, refreshTrigger }) => {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -22,6 +22,10 @@ const EventList = ({ id, type, searchQuery, sportName }) => {
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    fetchData();
+  }, [refreshTrigger]);
 
   useEffect(() => {
     if (searchQuery) {
